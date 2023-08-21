@@ -1,7 +1,13 @@
 import { createElement } from '../../render.js';
 import { createWaypointAddTemplate } from './waypoint-add-template.js';
 
-export default class WaypointAddView {
+export default class PointAddView {
+  // constructor({waypoint, waypointDestination, waypointOffers}) {
+  //   this.waypoint = waypoint;
+  //   this.waypointDestination = waypointDestination;
+  //   this.waypointOffers = waypointOffers;
+  // }
+
   getTemplate() {
     return createWaypointAddTemplate();
   }

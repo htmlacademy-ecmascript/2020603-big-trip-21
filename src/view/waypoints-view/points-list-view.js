@@ -1,9 +1,9 @@
 import { createElement } from '../../render.js';
-import { createWaypointsListTemplate } from './waypoints-list-template.js';
+import { createPointsListTemplate } from './points-list-template.js';
 
-export default class WaypointsListView {
+export default class PointsListView {
   getTemplate() {
-    return createWaypointsListTemplate();
+    return createPointsListTemplate();
   }
 
   getElement() {

@@ -1,5 +1,5 @@
 // разметка списка всех точек маршрута поездки
-function createWaypointsListTemplate() {
+function createPointsListTemplate() {
   return '<ul class="trip-events__list"></ul>';
 }
-export { createWaypointsListTemplate };
+export { createPointsListTemplate };
