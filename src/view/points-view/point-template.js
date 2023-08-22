@@ -2,20 +2,20 @@
 import { DateFormat, POINT_EMPTY } from '../../const.js';
 import { formatStringToDateTime, formatStringToShortDate, formatStringToTime, getPointDuration } from '../../utils.js';
 
-function createWaypointsOffersTemplate(waypointsOffers) {
-  return (
-    waypointsOffers.map((offer) => (`
-      <li class="event__offer">
-        <span class="event__offer-title">${offer.title}</span>
-        +€&nbsp;
-        <span class="event__offer-price">${offer.price}</span>
-      </li>`
-    )).join(' ')
-  );
-}
+// function createPointsOffersTemplate(pointsOffers) {
+//   return (
+//     pointsOffers.map((offer) => (`
+//       <li class="event__offer">
+//         <span class="event__offer-title">${offer.title}</span>
+//         +€&nbsp;
+//         <span class="event__offer-price">${offer.price}</span>
+//       </li>`
+//     )).join(' ')
+//   );
+// }
 
-function createWaypointTemplate({ waypoint = POINT_EMPTY, waypointDestination, waypointOffer }) {
-  const { dateFrom, dateTo, type, basePrice, isFavorite } = waypoint;
+function createPointTemplate({ point = POINT_EMPTY, pointDestination, pointOffer }) {
+  const { dateFrom, dateTo, type, basePrice, isFavorite } = point;
 
   const favoriteClassName = isFavorite
     ? 'event__favorite-btn event__favorite-btn--active'
@@ -28,7 +28,7 @@ function createWaypointTemplate({ waypoint = POINT_EMPTY, waypointDestination, w
       <div class="event__type">
         <img class="event__type-icon" width="42" height="42" src="img/icons/${type}.png" alt="Event type icon">
       </div>
-      <h3 class="event__title">${type} ${waypointDestination.name}</h3>
+      <h3 class="event__title">${type} ${pointDestination.name}</h3>
       <div class="event__schedule">
         <p class="event__time">
           <time class="event__start-time" datetime=${formatStringToDateTime(dateFrom)}>${formatStringToTime(dateFrom)}</time>
@@ -61,4 +61,4 @@ function createWaypointTemplate({ waypoint = POINT_EMPTY, waypointDestination, w
   </li>`
   );
 }
-export { createWaypointTemplate };
+export { createPointTemplate };

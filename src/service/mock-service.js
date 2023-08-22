@@ -1,6 +1,6 @@
 import { generateDestination } from '../mock/destination.js';
 import { generateOffer } from '../mock/offers.js';
-import { generateWaypoint } from '../mock/waypoint.js';
+import { generatePoint } from '../mock/point.js';
 
 import { POINTS_TYPES, DESTINATIONS_COUNT, POINTS_COUNT, OFFERS_COUNT } from '../const.js';
 import { getRandomInteger, getRandomArrayElement } from '../utils.js';
@@ -8,12 +8,12 @@ import { getRandomInteger, getRandomArrayElement } from '../utils.js';
 export default class MockService {
   destinations = [];
   offers = [];
-  waypoints = [];
+  points = [];
 
   constructor() {
     this.destinations = this.generateDestinations();
     this.offers = this.generateOffers();
-    this.waypoints = this.generateWaypoints();
+    this.points = this.generatePoints();
   }
 
   generateDestinations() {
@@ -27,7 +27,7 @@ export default class MockService {
     }));
   }
 
-  generateWaypoints() {
+  generatePoints() {
     return Array.from({ length: POINTS_COUNT }, () => {
       const type = getRandomArrayElement(POINTS_TYPES);
       const destination = getRandomArrayElement(this.destinations);
@@ -42,7 +42,7 @@ export default class MockService {
           .map((offer) => offer.id)
         : [];
 
-      return generateWaypoint(type, destination.id, offerIds);
+      return generatePoint(type, destination.id, offerIds);
     });
   }
 
@@ -54,7 +54,7 @@ export default class MockService {
     return this.offers;
   }
 
-  getWaypoints() {
-    return this.waypoints;
+  getPoints() {
+    return this.points;
   }
 }

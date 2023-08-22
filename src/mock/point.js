@@ -2,7 +2,7 @@ import { getRandomInteger } from '../utils.js';
 import { Price } from '../const.js';
 import { getDate } from '../utils.js';
 
-function generateWaypoint(type, destinationId, offerIds) {
+function generatePoint(type, destinationId, offerIds) {
   return {
     id: crypto.randomUUID(),
     basePrice: getRandomInteger(Price.MIN, Price.MAX),
@@ -15,4 +15,4 @@ function generateWaypoint(type, destinationId, offerIds) {
   };
 }
 
-export { generateWaypoint };
+export { generatePoint };

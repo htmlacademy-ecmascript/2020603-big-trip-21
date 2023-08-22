@@ -1,5 +1,5 @@
-// Разметка для показа формы создания точки маршрута (waypoint)
-function createWaypointAddTemplate() {
+// Разметка для показа формы создания точки маршрута (point)
+function createPointAddTemplate() {
   return `
   <li class="trip-events__item">
     <form class="event event--edit" action="#" method="post">
@@ -166,4 +166,4 @@ function createWaypointAddTemplate() {
   `;
 }
 
-export { createWaypointAddTemplate };
+export { createPointAddTemplate };
