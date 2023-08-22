@@ -2,19 +2,22 @@
 import { DateFormat, POINT_EMPTY } from '../../const.js';
 import { formatStringToDateTime, formatStringToShortDate, formatStringToTime, getPointDuration } from '../../utils.js';
 
-// function createPointsOffersTemplate(pointsOffers) {
-//   return (
-//     pointsOffers.map((offer) => (`
-//       <li class="event__offer">
-//         <span class="event__offer-title">${offer.title}</span>
-//         +€&nbsp;
-//         <span class="event__offer-price">${offer.price}</span>
-//       </li>`
-//     )).join(' ')
-//   );
-// }
+function createOffersTemplate(offers) {
+  return (
+    `<ul class="event__selected-offers">
+    ${(offers) ?
+      `${offers.map((offer) =>
+        `<li class="event__offer">
+        <span class="event__offer-title">${offer.title}</span>
+          &plus;&euro;&nbsp;
+        <span class="event__offer-price">${offer.price}</span>
+      </li>`).join('')}`
+      : ''}
+  </ul>`
+  );
+}
 
-function createPointTemplate({ point = POINT_EMPTY, pointDestination, pointOffer }) {
+function createPointTemplate({ point = POINT_EMPTY, pointDestination, pointOffers }) {
   const { dateFrom, dateTo, type, basePrice, isFavorite } = point;
 
   const favoriteClassName = isFavorite
@@ -41,13 +44,7 @@ function createPointTemplate({ point = POINT_EMPTY, pointDestination, pointOffer
         &euro;&nbsp;<span class="event__price-value">${basePrice}</span>
       </p>
       <h4 class="visually-hidden">Offers:</h4>
-      <ul class="event__selected-offers">
-        <li class="event__offer">
-          <span class="event__offer-title">Order Uber</span>
-          &plus;&euro;&nbsp;
-          <span class="event__offer-price">20</span>
-        </li>
-      </ul>
+      ${createOffersTemplate(pointOffers)}
       <button class=${favoriteClassName} type="button">
         <span class="visually-hidden">Add to favorite</span>
         <svg class="event__favorite-icon" width="28" height="28" viewBox="0 0 28 28">
