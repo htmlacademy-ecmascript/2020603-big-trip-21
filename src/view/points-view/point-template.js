@@ -1,5 +1,5 @@
 // разметка точки маршрута в общем списке всех точек
-import { DateFormat, POINT_EMPTY } from '../../const.js';
+import { POINT_EMPTY } from '../../const.js';
 import { formatStringToDateTime, formatStringToShortDate, formatStringToTime, getPointDuration } from '../../utils.js';
 
 function createOffersTemplate(offers) {
@@ -13,7 +13,7 @@ function createOffersTemplate(offers) {
         <span class="event__offer-price">${offer.price}</span>
       </li>`).join('')}`
       : ''}
-  </ul>`
+    </ul>`
   );
 }
 

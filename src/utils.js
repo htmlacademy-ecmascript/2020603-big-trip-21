@@ -27,7 +27,7 @@ function getRandomInteger(a, b) {
 }
 
 function formatStringToDateTime(date) {
-  return dayjs(date).format('YYYY-MM-DDTHH:mm');
+  return dayjs(date).format('DD/MM/YY HH:mm');
 }
 
 function formatStringToShortDate(date) {
@@ -47,6 +47,8 @@ function getPointDuration(dateFrom, dateTo) {
   let pointDuration = 0;
 
   switch (true) {
+    case (timeDiff <= 0):
+      return 'WRONG DATE!';
     case (timeDiff >= MSEC_IN_DAY):
       pointDuration = dayjs.duration(timeDiff).format('DD[D] HH[H] mm[M]');
       break;

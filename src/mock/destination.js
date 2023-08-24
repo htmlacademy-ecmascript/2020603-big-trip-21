@@ -11,7 +11,7 @@ function generateDestination() {
     description,
     pictures: [
       {
-        'src': `https://loremflickr.com/300/200?random=${crypto.randomUUID()}`,
+        'src': `https://loremflickr.com/248/152?random=${crypto.randomUUID()}`,
         'description': `${city} description`
       }
     ]
