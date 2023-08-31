@@ -1,4 +1,4 @@
-import { RenderPosition, render } from './render.js';
+import { render, RenderPosition } from './framework/render.js';
 
 import PointsPresenter from './presenters/points-presenter.js';
 import InfoView from './view/info-view/info-view.js';
