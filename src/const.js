@@ -76,6 +76,22 @@ const FilterType = {
   PAST: 'past'
 };
 
+const SortType = {
+  DAY: 'day',
+  EVENT: 'event',
+  TIME: 'time',
+  PRICE: 'price',
+  OFFER: 'offer'
+};
+
+const enabledSortType = {
+  [SortType.DAY]: true,
+  [SortType.EVENT]: false,
+  [SortType.TIME]: true,
+  [SortType.PRICE]: true,
+  [SortType.OFFER]: false
+};
+
 export {
   TYPEPOINTS,
   DateFormat,
@@ -89,4 +105,6 @@ export {
   MSEC_IN_HOUR,
   MSEC_IN_DAY,
   FilterType,
+  SortType,
+  enabledSortType
 };
