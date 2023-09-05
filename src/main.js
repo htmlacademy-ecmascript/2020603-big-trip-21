@@ -1,9 +1,9 @@
+import BoardPresenter from './presenters/board-presenter.js';
 import PointsModel from './models/points-model.js';
 import OffersModel from './models/offers-model.js';
 import DestinationsModel from './models/destinations-model.js';
 import MockService from './service/mock-service.js';
 import HeaderPresenter from './presenters/header-presenter.js';
-import BoardPresenter from './presenters/board-presenter.js';
 
 const headerElement = document.querySelector('.page-header');
 const tripMainElement = headerElement.querySelector('.trip-main');
@@ -19,7 +19,7 @@ const boardPresenter = new BoardPresenter({
   boardContainer: pointsSectionElement,
   destinationsModel,
   pointsModel,
-  offersModel
+  offersModel,
 });
 const headerPresenter = new HeaderPresenter({
   filtersContainerElement,
@@ -27,5 +27,5 @@ const headerPresenter = new HeaderPresenter({
   pointsModel
 });
 
-headerPresenter.init();
 boardPresenter.init();
+headerPresenter.init();

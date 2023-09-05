@@ -4,6 +4,8 @@ import PointsListView from '../view/points-view/points-list-view.js';
 import NoPointsMessageView from '../view/points-view/no-points-message-view.js';
 import PointPresenter from './point-presenter.js';
 import { updateItem } from '../utils/common.js';
+import { SortType, enabledSortType } from '../const.js';
+import { sort } from '../utils/sort.js';
 
 export default class BoardPresenter {
   #boardContainer = null;
@@ -15,6 +17,7 @@ export default class BoardPresenter {
   #sortComponent = null;
   #points = [];
   #pointPresenters = new Map();
+  #currentSortType = SortType.DAY;
 
   constructor({boardContainer, pointsModel, offersModel, destinationsModel}) {
     this.#boardContainer = boardContainer;
@@ -25,7 +28,7 @@ export default class BoardPresenter {
     this.#renderSort();
   }
 
-  #handleModeChange = () => { // метод, который сбросит представление у всех презентеров точек маршрута на представление по умолчанию
+  #handleModeChange = () => {
     this.#pointPresenters.forEach((presenter) => presenter.resetView());
   };
 
@@ -39,8 +42,41 @@ export default class BoardPresenter {
     this.#points = filterPoints;
   };
 
+  #sortPoints(sortType) {
+    this.#currentSortType = sortType;
+    this.#points = sort[this.#currentSortType](this.#points);
+  }
+
+  #handleSortTypeChange = (sortType) => {
+    if (this.#currentSortType === sortType) {
+      return;
+    }
+
+    this.#sortPoints(sortType);
+    this.#clearPointsList();
+    this.#renderPointsList();
+  };
+
+  #clearPointsList() {
+    this.#pointPresenters.forEach((presenter) => presenter.destroy());
+    this.#pointPresenters.clear();
+  }
+
   #renderSort() {
-    this.#sortComponent = new SortView();
+    const sortTypes = Object.values(SortType)
+      .map(
+        (type) => ({
+          type,
+          isChecked: (type === this.#currentSortType),
+          isDisabled: !enabledSortType[type]
+        }),
+      );
+
+    this.#sortComponent = new SortView({
+      items: sortTypes,
+      onSortTypeChange: this.#handleSortTypeChange
+    });
+    this.#sortPoints(this.#currentSortType);
     render(this.#sortComponent, this.#boardContainer);
   }
 
@@ -61,7 +97,6 @@ export default class BoardPresenter {
   #renderPointsList() {
     if (this.#points.length) {
       render(this.#pointsListComponent, this.#boardContainer);
-
       this.#points.forEach((point) => {
         this.#renderPoint(point);
       });

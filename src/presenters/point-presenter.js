@@ -30,6 +30,11 @@ export default class PointPresenter {
     this.#handleDeletedDataChange = onDeletedDataChange;
   }
 
+  destroy() {
+    remove(this.#pointEditComponent);
+    remove(this.#pointComponent);
+  }
+
   #escKeyDownHandler = (evt) => {
     if (evt.key === 'Escape') {
       evt.preventDefault();
