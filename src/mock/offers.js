@@ -1,12 +1,12 @@
-import { getRandomInteger } from '../utils.js';
+import { getRandomInt } from '../utils/common.js';
 import { Price } from '../const.js';
 
-function generateOffer(type) {
+function generateMockOffers(type) {
   return {
     id: crypto.randomUUID(),
     title: `Offer ${type}`,
-    price: getRandomInteger(Price.MIN, Price.MAX)
+    price: getRandomInt(Price.MIN, Price.MAX)
   };
 }
 
-export { generateOffer };
+export { generateMockOffers };

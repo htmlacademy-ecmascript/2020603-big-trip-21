@@ -1,5 +1,5 @@
 // Разметка для компонента показа кнопок-фильтров: EVERYTHING, FUTURE, PRESENT, PAST
-function createFilterTemplate() {
+function renderFiltersTemplate() {
   return `
     <form class="trip-filters" action="#" method="get">
       <div class="trip-filters__filter">
@@ -26,4 +26,5 @@ function createFilterTemplate() {
     </form>
   `;
 }
-export { createFilterTemplate };
+
+export { renderFiltersTemplate };
