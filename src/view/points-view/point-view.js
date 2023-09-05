@@ -1,35 +1,41 @@
-import AbstractView from '../../framework/view/abstract-view.js';
-import { createPointTemplate } from './point-template.js';
 import { POINT_EMPTY } from '../../const.js';
+import { renderPointTemplate } from './point-template.js';
+import AbstractView from '../../framework/view/abstract-view.js';
 
 export default class PointView extends AbstractView {
   #point = null;
   #pointDestination = null;
-  #pointOffers = null;
-  #handleEditClick = null;
+  #pointOffer = null;
+  #handleOpenClick = null;
+  #handleFavoriteClick = null;
 
-  constructor({ point = POINT_EMPTY, pointDestination, pointOffers, onEditClick }) {
+  constructor({point = POINT_EMPTY, pointDestination, pointOffer, onOpenClick, onFavoriteClick}) {
     super();
     this.#point = point;
     this.#pointDestination = pointDestination;
-    this.#pointOffers = pointOffers;
-    this.#handleEditClick = onEditClick; // метод вызова формы редактирования
+    this.#pointOffer = pointOffer;
+    this.#handleOpenClick = onOpenClick;
+    this.#handleFavoriteClick = onFavoriteClick;
 
-    this.element.querySelector('.event__rollup-btn') // находим кнопку в элементе
-      .addEventListener('click', this.#editClickHandler); // вешаем обработчик
+    this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#openClickHandler);
+    this.element.querySelector('.event__favorite-btn').addEventListener('click', this.#favoriteClickHandler);
   }
 
   get template() {
-    return createPointTemplate({
+    return renderPointTemplate({
       point: this.#point,
       pointDestination: this.#pointDestination,
-      pointOffers: this.#pointOffers
+      pointOffer: this.#pointOffer
     });
   }
 
-  #editClickHandler = (evt) => {
+  #openClickHandler = (evt) => {
     evt.preventDefault();
-    this.#handleEditClick();
+    this.#handleOpenClick();
   };
 
+  #favoriteClickHandler = (evt) => {
+    evt.preventDefault();
+    this.#handleFavoriteClick();
+  };
 }

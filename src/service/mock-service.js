@@ -1,60 +1,62 @@
-import { generateDestination } from '../mock/destination.js';
-import { generateOffer } from '../mock/offers.js';
-import { generatePoint } from '../mock/point.js';
-
-import { POINTS_TYPES, DESTINATIONS_COUNT, POINTS_COUNT, OFFERS_COUNT } from '../const.js';
-import { getRandomInteger, getRandomArrayElement } from '../utils.js';
+import { generateMockPoints } from '../mock/points.js';
+import { generateMockDestinations } from '../mock/destinations.js';
+import { generateMockOffers } from '../mock/offers.js';
+import { TYPEPOINTS } from '../const.js';
+import { getRandomInt, getRandomArrayElement } from '../utils/common.js';
 
 export default class MockService {
-  destinations = [];
-  offers = [];
-  points = [];
+  #destinations = [];
+  #offers = [];
+  #points = [];
 
   constructor() {
-    this.destinations = this.generateDestinations();
-    this.offers = this.generateOffers();
-    this.points = this.generatePoints();
+    this.#destinations = this.generateDestination();
+    this.#offers = this.generateOffers();
+    this.#points = this.generatePoints();
   }
 
-  generateDestinations() {
-    return Array.from({ length: DESTINATIONS_COUNT }, () => generateDestination());
+  getDestinations() {
+    return this.#destinations;
+  }
+
+  getOffers() {
+    return this.#offers;
+  }
+
+  getPoints() {
+    return this.#points;
+  }
+
+  generateDestination() {
+    return Array.from(
+      { length: 5 },
+      () => generateMockDestinations()
+    );
   }
 
   generateOffers() {
-    return POINTS_TYPES.map((type) => ({
+    return TYPEPOINTS.map((type) => ({
       type,
-      offers: Array.from({ length: getRandomInteger(0, OFFERS_COUNT)}, () => generateOffer(type))
+      offers: Array.from({ length: getRandomInt(0, 5) }, () => generateMockOffers(type))
     }));
   }
 
   generatePoints() {
-    return Array.from({ length: POINTS_COUNT }, () => {
-      const type = getRandomArrayElement(POINTS_TYPES);
-      const destination = getRandomArrayElement(this.destinations);
+    return Array.from({ length: 5 }, () => {
+      const type = getRandomArrayElement(TYPEPOINTS);
+      const destination = getRandomArrayElement(this.#destinations);
+      const hasOffers = getRandomInt(0, 1);
 
-      const hasOffers = getRandomInteger(0, 1); // значение приведётся к false или true далее в условии
-
-      const offersByType = this.offers.find((offer) => offer.type === type);
+      const offersByType = this.#offers
+        .find((item) => item.type === type);
 
       const offerIds = (hasOffers)
         ? offersByType.offers
-          .slice(0, getRandomInteger(0, OFFERS_COUNT))
-          .map((offer) => offer.id)
+          .slice(0, getRandomInt(0, 5))
+          .map((item) => item.id)
         : [];
 
-      return generatePoint(type, destination.id, offerIds);
+      return generateMockPoints(type, destination.id, offerIds);
     });
-  }
-
-  getDestinations() {
-    return this.destinations;
-  }
-
-  getOffers() {
-    return this.offers;
-  }
-
-  getPoints() {
-    return this.points;
   }
 }

@@ -1,5 +1,5 @@
 // Разметка для компонента показа кнопок сортировки: DAY, TIME, PRICE
-function createSortTemplate() {
+function renderSortTemplate() {
   return `
   <form class="trip-events__trip-sort  trip-sort" action="#" method="get">
     <div class="trip-sort__item  trip-sort__item--day">
@@ -29,4 +29,4 @@ function createSortTemplate() {
   </form>
   `;
 }
-export { createSortTemplate };
+export { renderSortTemplate };
