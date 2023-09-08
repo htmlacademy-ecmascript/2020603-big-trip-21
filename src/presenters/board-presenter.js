@@ -28,26 +28,17 @@ export default class BoardPresenter {
     this.#renderSort();
   }
 
-  #handleModeChange = () => {
+  // Обработчики START
+  #modeChangeHandler = () => {
     this.#pointPresenters.forEach((presenter) => presenter.resetView());
   };
 
-  #handlePointChange = (updatedPoint) => {
+  #pointChangeHandler = (updatedPoint) => {
     this.#points = updateItem(this.#points, updatedPoint);
     this.#pointPresenters.get(updatedPoint.id).init(updatedPoint);
   };
 
-  #handlePointDeletedChange = (point) => {
-    const filterPoints = this.#points.filter((item) => item.id !== point.id);
-    this.#points = filterPoints;
-  };
-
-  #sortPoints(sortType) {
-    this.#currentSortType = sortType;
-    this.#points = sort[this.#currentSortType](this.#points);
-  }
-
-  #handleSortTypeChange = (sortType) => {
+  #sortTypeChangeHandler = (sortType) => {
     if (this.#currentSortType === sortType) {
       return;
     }
@@ -56,6 +47,12 @@ export default class BoardPresenter {
     this.#clearPointsList();
     this.#renderPointsList();
   };
+  // Обработчики END
+
+  #sortPoints(sortType) {
+    this.#currentSortType = sortType;
+    this.#points = sort[this.#currentSortType](this.#points);
+  }
 
   #clearPointsList() {
     this.#pointPresenters.forEach((presenter) => presenter.destroy());
@@ -74,7 +71,7 @@ export default class BoardPresenter {
 
     this.#sortComponent = new SortView({
       items: sortTypes,
-      onSortTypeChange: this.#handleSortTypeChange
+      onSortTypeChange: this.#sortTypeChangeHandler
     });
     this.#sortPoints(this.#currentSortType);
     render(this.#sortComponent, this.#boardContainer);
@@ -85,9 +82,8 @@ export default class BoardPresenter {
       pointsListContainer: this.#pointsListComponent,
       offersModel: this.#offersModel,
       destinationsModel: this.#destinationsModel,
-      onDataChange: this.#handlePointChange,
-      onModeChange: this.#handleModeChange,
-      onDeletedDataChange: this.#handlePointDeletedChange
+      onDataChange: this.#pointChangeHandler,
+      onModeChange: this.#modeChangeHandler,
     });
 
     pointPresenter.init(point);
