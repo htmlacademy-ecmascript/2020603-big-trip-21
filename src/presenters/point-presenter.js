@@ -19,71 +19,77 @@ export default class PointPresenter {
 
   #point = null;
   #mode = Mode.DEFAULT;
-  #handleDeletedDataChange = null;
 
-  constructor({ pointsListContainer, offersModel, destinationsModel, onDataChange, onModeChange, onDeletedDataChange }) {
+  constructor({ pointsListContainer, offersModel, destinationsModel, onDataChange, onModeChange }) {
     this.#pointsListContainer = pointsListContainer;
     this.#offersModel = offersModel;
     this.#destinationsModel = destinationsModel;
     this.#handleDataChange = onDataChange;
     this.#handleModeChange = onModeChange;
-    this.#handleDeletedDataChange = onDeletedDataChange;
   }
+
+  // Обработчики START
+  #escKeydownHandler = (evt) => {
+    if (evt.key === 'Escape') {
+      evt.preventDefault();
+      this.#resetPoint();
+      this.#replaceFormToPoint();
+      document.removeEventListener('keydown', this.#escKeydownHandler);
+    }
+  };
+
+  #formSubmitHandler = (point) => {
+    this.#replaceFormToPoint();
+    this.#handleDataChange(point);
+  };
+
+  #closeClickHandler = () => {
+    this.#resetPoint();
+    this.#replaceFormToPoint();
+  };
+
+  #deleteClickHandler = () => {
+    document.removeEventListener('keydown', this.#escKeydownHandler);
+    remove(this.#pointEditComponent);
+  };
+
+  #openClickHandler = () => {
+    this.#replacePointToForm();
+  };
+
+  #favoriteClickHandler = () => {
+    this.#handleDataChange({ ...this.#point, isFavorite: !this.#point.isFavorite });
+  };
+  // Обработчики END
 
   destroy() {
     remove(this.#pointEditComponent);
     remove(this.#pointComponent);
   }
 
-  #escKeyDownHandler = (evt) => {
-    if (evt.key === 'Escape') {
-      evt.preventDefault();
-      this.#replaceFormToPoint();
-      document.removeEventListener('keydown', this.#escKeyDownHandler);
-    }
-  };
+  #resetPoint() {
+    this.#pointEditComponent.reset(this.#point);
+  }
 
   resetView() {
     if (this.#mode !== Mode.DEFAULT) {
+      this.#resetPoint();
       this.#replaceFormToPoint();
     }
   }
 
   #replacePointToForm() { // скрываем точку и открываем форму редактирования
     replace(this.#pointEditComponent, this.#pointComponent);
-    document.addEventListener('keydown', this.#escKeyDownHandler);
+    document.addEventListener('keydown', this.#escKeydownHandler);
     this.#handleModeChange();
     this.#mode = Mode.EDITING;
   }
 
   #replaceFormToPoint() { // скрываем форму редактирования и открываем точку
     replace(this.#pointComponent, this.#pointEditComponent);
-    document.removeEventListener('keydown', this.#escKeyDownHandler);
+    document.removeEventListener('keydown', this.#escKeydownHandler);
     this.#mode = Mode.DEFAULT;
   }
-
-  #handleFormSubmit = (point) => {
-    this.#replaceFormToPoint();
-    this.#handleDataChange(point);
-  };
-
-  #handleCloseClick = () => {
-    this.#replaceFormToPoint();
-  };
-
-  #handleDeleteClick = () => {
-    document.removeEventListener('keydown', this.#escKeyDownHandler);
-    remove(this.#pointEditComponent);
-    this.#handleDeletedDataChange({...this.#point});
-  };
-
-  #handleOpenClick = () => {
-    this.#replacePointToForm();
-  };
-
-  #handleFavoriteClick = () => {
-    this.#handleDataChange({ ...this.#point, isFavorite: !this.#point.isFavorite });
-  };
 
   init(point) {
     this.#point = point;
@@ -95,17 +101,17 @@ export default class PointPresenter {
       point: this.#point,
       pointDestinations: this.#destinationsModel.destinations,
       pointOffers: this.#offersModel.offers,
-      onFormSubmit: this.#handleFormSubmit,
-      onCloseClick: this.#handleCloseClick,
-      onDeleteClick: this.#handleDeleteClick,
+      onFormSubmit: this.#formSubmitHandler,
+      onCloseClick: this.#closeClickHandler,
+      onDeleteClick: this.#deleteClickHandler,
     });
 
     this.#pointComponent = new PointView({ // компонент точки маршрута
       point: this.#point,
       pointDestination: this.#destinationsModel.getById(this.#point.destination),
       pointOffer: this.#offersModel.getByType(this.#point.type),
-      onOpenClick: this.#handleOpenClick,
-      onFavoriteClick: this.#handleFavoriteClick
+      onOpenClick: this.#openClickHandler,
+      onFavoriteClick: this.#favoriteClickHandler
     });
 
     if (prevPointEditComponent === null || prevPointComponent === null) {
