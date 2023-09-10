@@ -1,12 +1,14 @@
-import { getDate } from '../utils/dates.js';
+import { getRandomDates } from '../utils/dates.js';
 import { getRandomInt } from '../utils/common.js';
 
 function generateMockPoints(type, destinationId, offerIds) {
+  const { dateFrom, dateTo } = getRandomDates();
+
   return {
     id: crypto.randomUUID(),
     basePrice: getRandomInt(1, 3000),
-    dateFrom: getDate({ next: false }),
-    dateTo: getDate({ next: true }),
+    dateFrom,
+    dateTo,
     destination: destinationId,
     isFavorite: !!getRandomInt(0, 1),
     offers: offerIds,

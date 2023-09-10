@@ -57,17 +57,9 @@ const POINT_EMPTY = {
 
 const Duration = {
   MIN: 59,
-  DAY: 7,
-  HOUR: 23
+  HOUR: 23,
+  DAY: 7
 };
-
-const MSEC_IN_SEC = 1000;
-const SEC_IN_MIN = 60;
-const MIN_IN_HOUR = 60;
-const HOUR_IN_DAY = 24;
-
-const MSEC_IN_HOUR = MSEC_IN_SEC * SEC_IN_MIN * MIN_IN_HOUR;
-const MSEC_IN_DAY = MSEC_IN_HOUR * HOUR_IN_DAY;
 
 const FilterType = {
   EVERYTHING: 'everything',
@@ -102,8 +94,6 @@ export {
   Price,
   PICTURES_DESCRIPTIONS,
   Duration,
-  MSEC_IN_HOUR,
-  MSEC_IN_DAY,
   FilterType,
   SortType,
   enabledSortType
