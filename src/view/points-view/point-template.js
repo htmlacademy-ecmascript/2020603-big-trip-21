@@ -1,5 +1,5 @@
 import { DateFormat, POINT_EMPTY } from '../../const.js';
-import { humanizeDate, getPointDuration } from '../../utils/dates.js';
+import { humanizeDate, getPointDurationMessage } from '../../utils/dates.js';
 
 function renderOffersList(offers) {
   return `
@@ -39,7 +39,7 @@ function renderPointTemplate({ point = POINT_EMPTY, pointDestination, pointOffer
               &mdash;
             <time class="event__end-time" datetime="${dateTo}">${dateEnd}</time>
           </p>
-          <p class="event__duration">${getPointDuration(dateFrom, dateTo)}</p>
+          <p class="event__duration">${getPointDurationMessage(dateFrom, dateTo)}</p>
         </div>
         <p class="event__price">
           &euro;&nbsp;<span class="event__price-value">${basePrice}</span>

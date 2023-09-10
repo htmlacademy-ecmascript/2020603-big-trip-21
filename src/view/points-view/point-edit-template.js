@@ -61,7 +61,7 @@ const renderTypesListTemplate = (offerTypes, type) => {
   `;
 };
 
-function createPointEditTemplate({ point = POINT_EMPTY, pointDestinations, pointOffers }) {
+function renderPointEditTemplate({ point = POINT_EMPTY, pointDestinations, pointOffers }) {
   const { dateFrom, dateTo, type, basePrice, destination } = point;
   const offersByType = pointOffers.find((item) => item.type === type).offers;
   const currentDestination = pointDestinations.find((item) => item.id === destination);
@@ -126,4 +126,4 @@ function createPointEditTemplate({ point = POINT_EMPTY, pointDestinations, point
   `;
 }
 
-export { createPointEditTemplate };
+export { renderPointEditTemplate };
