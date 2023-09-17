@@ -1,5 +1,5 @@
 import { POINT_EMPTY } from '../../const.js';
-import { renderPointTemplate } from './point-template.js';
+import { createPointTemplate } from './point-template.js';
 import AbstractView from '../../framework/view/abstract-view.js';
 
 export default class PointView extends AbstractView {
@@ -9,7 +9,7 @@ export default class PointView extends AbstractView {
   #handleOpenClick = null;
   #handleFavoriteClick = null;
 
-  constructor({point = POINT_EMPTY, pointDestination, pointOffer, onOpenClick, onFavoriteClick}) {
+  constructor({ point = POINT_EMPTY, pointDestination, pointOffer, onOpenClick, onFavoriteClick }) {
     super();
     this.#point = point;
     this.#pointDestination = pointDestination;
@@ -21,7 +21,7 @@ export default class PointView extends AbstractView {
   }
 
   get template() {
-    return renderPointTemplate({
+    return createPointTemplate({
       point: this.#point,
       pointDestination: this.#pointDestination,
       pointOffer: this.#pointOffer

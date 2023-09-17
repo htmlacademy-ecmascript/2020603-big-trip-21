@@ -1,4 +1,4 @@
-function renderInfoTemplate() {
+function createInfoTemplate() {
   return `
     <section class="trip-main__trip-info  trip-info">
       <div class="trip-info__main">
@@ -12,5 +12,4 @@ function renderInfoTemplate() {
     </section>
   `;
 }
-
-export { renderInfoTemplate };
+export { createInfoTemplate };

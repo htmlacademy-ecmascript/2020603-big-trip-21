@@ -1,5 +1,5 @@
 function getSortItem({ type, isChecked, isDisabled }) {
-  return `
+  return (`
     <div class="trip-sort__item  trip-sort__item--${type}">
       <input
         id="sort-${type}"
@@ -16,15 +16,15 @@ function getSortItem({ type, isChecked, isDisabled }) {
         for="sort-${type}">${type}
       </label>
     </div>
-  `;
+  `);
 }
 
-function renderSortTemplate(sortItems) {
-  return `
+function createSortTemplate(sortItems) {
+  return (`
     <form class="trip-events__trip-sort  trip-sort" action="#" method="get">
       ${sortItems.map((item) => getSortItem(item)).join('')}
     </form>
-  `;
+  `);
 }
 
-export { renderSortTemplate };
+export { createSortTemplate };
