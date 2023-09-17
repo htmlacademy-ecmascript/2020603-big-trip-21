@@ -148,11 +148,11 @@ export default class PointEditView extends AbstractStatefulView {
     this.element
       .querySelector('form')
       .addEventListener('submit', this.#formSubmitHandler);
-    
+
     this.element
       .querySelector('.event__reset-btn')
       .addEventListener('click', this.#deleteClickHandler);
-    
+
     if (!this.#isNewPoint) {
       this.element
         .querySelector('.event__rollup-btn')
@@ -162,7 +162,7 @@ export default class PointEditView extends AbstractStatefulView {
     this.element
       .querySelector('.event__input--destination')
       .addEventListener('change', this.#destinationChangeHandler);
-    
+
     this.element
       .querySelector('.event__input--price')
       .addEventListener('change', this.#priceChangeHandler);

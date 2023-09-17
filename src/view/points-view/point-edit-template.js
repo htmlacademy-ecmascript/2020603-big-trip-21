@@ -26,7 +26,7 @@ function createPictures(pictures) {
     return `
     <div class="event__photos-tape">
       ${(pictures).map((picture) =>
-        `<img class="event__photo" src="${picture.src}" alt="${picture.description}">`).join('')}
+    `<img class="event__photo" src="${picture.src}" alt="${picture.description}">`).join('')}
     </div>
     `;
   } else {
@@ -95,10 +95,10 @@ function createPointEditTemplate({ point = POINT_EMPTY, pointDestinations, point
             </label>
             <input class="event__input  event__input--destination"
               id="event-destination-1"
-              type="text" 
-              name="event-destination" 
-              autocomplete="off" 
-              value="${he.encode((currentDestination) ? currentDestination.name : '')}" 
+              type="text"
+              name="event-destination"
+              autocomplete="off"
+              value="${he.encode((currentDestination) ? currentDestination.name : '')}"
               list="destination-list-1" required>
 
             ${createDatalistElement(pointDestinations)}
@@ -129,18 +129,18 @@ function createPointEditTemplate({ point = POINT_EMPTY, pointDestinations, point
               id="event-price-1"
               type="text"
               name="event-price"
-              value="${basePrice}" 
-              min="1" 
-              autocomplete="off" 
+              value="${basePrice}"
+              min="1"
+              autocomplete="off"
               required>
           </div>
 
           <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
           <button class="event__reset-btn" type="reset">${(isNewPoint) ? 'Cancel' : 'Delete'}</button>
           ${(isNewPoint) ? '' :
-          `<button class="event__rollup-btn" type="button">
-            <span class="visually-hidden">Open event</span>
-          </button>`}
+    `<button class="event__rollup-btn" type="button">
+        <span class="visually-hidden">Open event</span>
+    </button>`}
         </header>
         <section class="event__details">
           <section class="event__section  event__section--offers">
