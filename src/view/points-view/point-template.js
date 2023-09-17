@@ -1,27 +1,40 @@
 import { DateFormat, POINT_EMPTY } from '../../const.js';
 import { humanizeDate, getPointDurationMessage } from '../../utils/dates.js';
 
-function renderOffersList(offers) {
+function createOffersList(offers) {
   return `
     <ul class="event__selected-offers">
-    ${(offers) ?
-    `${offers.offers.map((item) =>
+    ${(offers.length !== 0) ?
+    `${offers.map((item) =>
       `<li class="event__offer">
-        <span class="event__offer-title">${item.title}</span>
-          &plus;&euro;&nbsp;
-        <span class="event__offer-price">${item.price}</span>
-        </li>`).join('')}`
+      <span class="event__offer-title">${item.title}</span>
+        &plus;&euro;&nbsp;
+      <span class="event__offer-price">${item.price}</span>
+    </li>`).join('')}`
     : ''}
     </ul>
   `;
 }
 
-function renderPointTemplate({ point = POINT_EMPTY, pointDestination, pointOffer }) {
+function createPointTemplate({ point = POINT_EMPTY, pointDestination, pointOffer }) {
   const { dateFrom, dateTo, type, basePrice, isFavorite } = point;
+  const { offers } = pointOffer;
 
   const dateStart = humanizeDate(dateFrom, DateFormat.HOUR_MINUTE);
   const dateEnd = humanizeDate(dateTo, DateFormat.HOUR_MINUTE);
   const dateMonth = humanizeDate(dateFrom, DateFormat.MONTH_DAY);
+  const pointDurationMessage = getPointDurationMessage(dateFrom, dateTo);
+
+  const getOffers = () => {
+    const currentOffers = [];
+
+    for (let i = 0; i <= point.offers.length - 1; i++) {
+      const itemOffer = offers.find((item) => item.id === point.offers[i]);
+      currentOffers.push(itemOffer);
+    }
+
+    return currentOffers;
+  };
 
   const favoriteClassName = isFavorite ? 'event__favorite-btn event__favorite-btn--active' : 'event__favorite-btn';
 
@@ -39,13 +52,13 @@ function renderPointTemplate({ point = POINT_EMPTY, pointDestination, pointOffer
               &mdash;
             <time class="event__end-time" datetime="${dateTo}">${dateEnd}</time>
           </p>
-          <p class="event__duration">${getPointDurationMessage(dateFrom, dateTo)}</p>
+          <p class="event__duration">${pointDurationMessage}</p>
         </div>
         <p class="event__price">
           &euro;&nbsp;<span class="event__price-value">${basePrice}</span>
         </p>
         <h4 class="visually-hidden">Offers:</h4>
-          ${renderOffersList(pointOffer)}
+          ${createOffersList(getOffers())}
         <button class="${favoriteClassName}" type="button">
           <span class="visually-hidden">Add to favorite</span>
           <svg class="event__favorite-icon" width="28" height="28" viewBox="0 0 28 28">
@@ -60,4 +73,4 @@ function renderPointTemplate({ point = POINT_EMPTY, pointDestination, pointOffer
   );
 }
 
-export { renderPointTemplate };
+export { createPointTemplate };

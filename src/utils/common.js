@@ -6,6 +6,7 @@ function getRandomInt(a, b) {
   if (a > b || a < 0 || b < 0) {
     return NaN;
   }
+
   const lower = Math.ceil(Math.min(a, b));
   const upper = Math.floor(Math.max(a, b));
 
@@ -16,8 +17,8 @@ function updateItem(items, update) {
   return items.map((item) => item.id === update.id ? update : item);
 }
 
-function transformToUpperCase(word) {
+function convertFirstLetterToUpperCase(word) {
   return word.charAt(0).toUpperCase() + word.slice(1);
 }
 
-export { getRandomArrayElement, getRandomInt, updateItem, transformToUpperCase };
+export { getRandomArrayElement, getRandomInt, updateItem, convertFirstLetterToUpperCase };

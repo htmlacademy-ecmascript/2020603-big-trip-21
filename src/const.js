@@ -1,11 +1,10 @@
 const CITIES = [
-  'Geneva',
   'Krasnoyarsk',
-  'Oslo',
-  'Moscow',
+  'Omsk',
+  'Novosibirsk',
   'Kyzyl',
-  'Rome',
-  'Tokio'
+  'Abakan',
+  'Irkutsk'
 ];
 
 const PICTURES_DESCRIPTIONS = [
@@ -32,11 +31,6 @@ const TYPEPOINTS = [
   'restaurant',
 ];
 
-const Price = {
-  MIN: 1,
-  MAX: 100
-};
-
 const DateFormat = {
   FULL_DATE: 'DD/MM/YY HH:mm',
   HOUR_MINUTE: 'HH:mm',
@@ -55,10 +49,15 @@ const POINT_EMPTY = {
   type: DEFAULT_TYPE,
 };
 
+const OfferPrice = {
+  MIN: 1,
+  MAX: 100
+};
+
 const Duration = {
   MIN: 59,
-  HOUR: 23,
-  DAY: 7
+  DAY: 7,
+  HOUR: 23
 };
 
 const FilterType = {
@@ -76,6 +75,18 @@ const SortType = {
   OFFER: 'offer'
 };
 
+const UserAction = {
+  UPDATE_POINT: 'UPDATE_POINT',
+  ADD_POINT: 'ADD_POINT',
+  DELETE_POINT: 'DELETE_POINT',
+};
+
+const UpdateType = {
+  PATCH: 'PATCH',
+  MINOR: 'MINOR',
+  MAJOR: 'MAJOR',
+};
+
 const enabledSortType = {
   [SortType.DAY]: true,
   [SortType.EVENT]: false,
@@ -89,12 +100,14 @@ export {
   DateFormat,
   DEFAULT_TYPE,
   CITIES,
-  DESTINATIONS_DESCRIPTIONS,
   POINT_EMPTY,
-  Price,
+  OfferPrice,
+  DESTINATIONS_DESCRIPTIONS,
   PICTURES_DESCRIPTIONS,
   Duration,
   FilterType,
   SortType,
-  enabledSortType
+  enabledSortType,
+  UserAction,
+  UpdateType
 };

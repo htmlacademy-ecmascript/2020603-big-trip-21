@@ -1,41 +1,42 @@
 import { render, RenderPosition } from '../framework/render';
-import NewEventButtonView from '../view/button-view/new-event-button-view.js';
 import InfoView from '../view/info-view/info-view.js';
-import FiltersView from '../view/filters-view/filters-view.js';
-import { generateFilters } from '../mock/filter.js';
+import FilterPresenter from './filter-presenter';
 
 export default class HeaderPresenter {
-  #tripMainElement = null;
-  #filtersContainerElement = null;
   #pointsModel = null;
-  #filters = [];
+  #filterModel = null;
 
-  constructor({ filtersContainerElement, tripMainElement, pointsModel }) {
+  #tripMainElement = null;
+  #filtersContainer = null;
+
+  constructor({ filtersContainer, tripMainElement, pointsModel, filterModel }) {
     this.#tripMainElement = tripMainElement;
-    this.#filtersContainerElement = filtersContainerElement;
+    this.#filtersContainer = filtersContainer;
     this.#pointsModel = pointsModel;
-    this.#filters = generateFilters(this.#pointsModel.points);
-  }
-
-  #renderFilters() {
-    render(new FiltersView({ filters: this.#filters }), this.#filtersContainerElement);
+    this.#filterModel = filterModel;
   }
 
   #renderInfo() {
     render(new InfoView(), this.#tripMainElement, RenderPosition.AFTERBEGIN);
   }
 
-  #renderNewEventButton() {
-    render(new NewEventButtonView(), this.#tripMainElement);
+  #renderFilter() {
+    const filterPresenter = new FilterPresenter({
+      filtersContainer: this.#filtersContainer,
+      filterModel: this.#filterModel,
+      pointsModel: this.#pointsModel,
+    });
+
+    filterPresenter.init();
   }
 
   #renderHeader() {
-    this.#renderFilters();
+    this.#renderFilter();
     this.#renderInfo();
-    // this.#renderNewEventButton();
   }
 
   init() {
     this.#renderHeader();
   }
 }
+
