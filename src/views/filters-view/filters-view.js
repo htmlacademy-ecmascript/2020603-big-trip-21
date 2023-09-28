@@ -20,7 +20,6 @@ export default class FilterView extends AbstractView {
   }
 
   #optionChangeHandler = (evt) => {
-    evt.preventDefault();
     this.#handleOptionChange(evt.target.value);
   };
 }

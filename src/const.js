@@ -1,5 +1,5 @@
-import { showAll, showFuture, showPast, showPresent } from './utils/filters';
-import { compareByDateFrom, compareByPrice, compareByDuration } from './utils/sorting';
+import { showAll, showFuture, showPast, showPresent } from './utils/filters.js';
+import { compareByDateFrom, compareByPrice, compareByDuration } from './utils/sorting.js';
 
 export const AUTHORIZATION = 'Basic loremipsum2023';
 export const END_POINT = 'https://21.objects.pages.academy/big-trip';
@@ -49,27 +49,22 @@ export const SORT_OPTIONS = [
   {
     name: 'day',
     sortCb: compareByDateFrom,
-    isDisable: false,
   },
   {
     name: 'event',
     sortCb: null,
-    isDisable: true,
   },
   {
     name: 'time',
     sortCb: compareByDuration,
-    isDisable: false,
   },
   {
     name: 'price',
     sortCb: compareByPrice,
-    isDisable: false,
   },
   {
     name: 'offers',
     sortCb: null,
-    isDisable: true,
   },
 ];
 

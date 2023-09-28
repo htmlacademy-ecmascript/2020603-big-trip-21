@@ -1,4 +1,4 @@
-import {AUTHORIZATION, END_POINT} from './const.js';
+import { AUTHORIZATION, END_POINT } from './const.js';
 import PointsModel from './models/points-model.js';
 import PointsApiService from './points-api-service.js';
 import OffersModel from './models/offers-model.js';
