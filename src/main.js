@@ -1,54 +1,57 @@
+import {AUTHORIZATION, END_POINT} from './const.js';
 import PointsModel from './models/points-model.js';
+import PointsApiService from './points-api-service.js';
 import OffersModel from './models/offers-model.js';
-import FilterModel from './models/filter-model.js';
 import DestinationsModel from './models/destinations-model.js';
-import MockService from './mock/mock-service.js';
-import NewEventButtonView from './view/button-view/new-point-button-view.js';
-import HeaderPresenter from './presenters/header-presenter.js';
+import FilterModel from './models/filter-model.js';
 import BoardPresenter from './presenters/board-presenter.js';
-import { render } from './framework/render.js';
+import SummaryPresenter from './presenters/summary-presenter.js';
+import FilterPresenter from './presenters/filter-presenter.js';
 
-const headerElement = document.querySelector('.page-header');
-const tripMainElement = headerElement.querySelector('.trip-main');
-const filtersContainer = tripMainElement.querySelector('.trip-controls__filters');
+const headerContainer = document.querySelector('.trip-main');
+const summaryContainer = headerContainer.querySelector('.trip-controls');
+const filterContainer = headerContainer.querySelector('.trip-controls__filters');
 const boardContainer = document.querySelector('.trip-events');
 
-const mockService = new MockService();
+const pointsApiService = new PointsApiService(END_POINT, AUTHORIZATION);
 
-const pointsModel = new PointsModel(mockService);
-const offersModel = new OffersModel(mockService);
-const destinationsModel = new DestinationsModel(mockService);
+const pointsModel = new PointsModel({
+  pointsApiService
+});
+const offersModel = new OffersModel({
+  pointsApiService
+});
+const destinationsModel = new DestinationsModel({
+  pointsApiService
+});
 const filterModel = new FilterModel();
 
 const boardPresenter = new BoardPresenter({
   boardContainer,
-  destinationsModel,
+  headerContainer,
   pointsModel,
   offersModel,
+  destinationsModel,
   filterModel,
-  onNewPointDestroy: newPointFormCloseHandler
 });
-
-const headerPresenter = new HeaderPresenter({
-  pointsModel,
-  filterModel,
-  filtersContainer,
-  tripMainElement,
-});
-
-const newEventButtonComponent = new NewEventButtonView({
-  onClick: newEventButtonClickHandler
-});
-
-function newPointFormCloseHandler() {
-  newEventButtonComponent.element.disabled = false;
-}
-
-function newEventButtonClickHandler() {
-  boardPresenter.createNewPoint();
-  newEventButtonComponent.element.disabled = true;
-}
-
-render(newEventButtonComponent, tripMainElement);
-headerPresenter.init();
 boardPresenter.init();
+
+const summaryPresenter = new SummaryPresenter({
+  summaryContainer,
+  pointsModel,
+  offersModel,
+  destinationsModel
+});
+summaryPresenter.init();
+
+const filterPresenter = new FilterPresenter({
+  filterContainer,
+  filterModel,
+  pointsModel,
+});
+filterPresenter.init();
+
+Promise.all([
+  offersModel.init(),
+  destinationsModel.init(),
+]).then(() => pointsModel.init());

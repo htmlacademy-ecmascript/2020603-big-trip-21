@@ -1,6 +1,6 @@
 # Проект «Большое путешествие»
 
-* Студент: [Алёна Высоцкова](https://up.htmlacademy.ru/ecmascript/21/user/2107215).
+* Студент: [Омак Ооржак](https://up.htmlacademy.ru/ecmascript/21/user/2020603).
 * Наставник: [Вероника Синицына](https://htmlacademy.ru/profile/id118601).
 
 ---

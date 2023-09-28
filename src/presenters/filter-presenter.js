@@ -1,17 +1,16 @@
-import { render, replace, remove } from '../framework/render.js';
-import FiltersView from '../view/filters-view/filters-view.js';
-import { filter } from '../utils/filter.js';
-import { FilterType, UpdateType } from '../const.js';
+import {render, replace, remove} from '../framework/render.js';
+import FilterView from '../views/filters-view/filters-view.js';
+import {FILTER_OPTIONS, UpdateType} from '../const.js';
 
 export default class FilterPresenter {
-  #filtersContainer = null;
+  #filterContainer = null;
   #filterModel = null;
   #pointsModel = null;
 
   #filterComponent = null;
 
-  constructor({ filtersContainer, filterModel, pointsModel }) {
-    this.#filtersContainer = filtersContainer;
+  constructor({filterContainer, filterModel, pointsModel}) {
+    this.#filterContainer = filterContainer;
     this.#filterModel = filterModel;
     this.#pointsModel = pointsModel;
 
@@ -22,40 +21,34 @@ export default class FilterPresenter {
   get filters() {
     const points = this.#pointsModel.points;
 
-    return Object.values(FilterType).map((type) => ({
-      type,
-      count: filter[type](points).length
-    }));
+    return FILTER_OPTIONS.reduce((accumulator, option) => {
+      accumulator[option.name] = Boolean(points.filter(option.filterCb).length);
+      return accumulator;
+    }, {});
   }
 
-  #handleModelEvent = () => {
-    this.init();
-  };
-
-  #handleFilterTypeChange = (filterType) => {
-    if (this.#filterModel.filter === filterType) {
-      return;
-    }
-
-    this.#filterModel.setFilter(UpdateType.MAJOR, filterType);
-  };
-
   init() {
-    const filters = this.filters;
     const prevFilterComponent = this.#filterComponent;
-
-    this.#filterComponent = new FiltersView({
-      filters,
-      currentFilterType: this.#filterModel.filter,
-      onFilterTypeChange: this.#handleFilterTypeChange
+    this.#filterComponent = new FilterView({
+      filters: this.filters,
+      currentOptionName: this.#filterModel.currentOption.name,
+      onOptionChange: this.#handleFilterOptionChange
     });
 
     if (prevFilterComponent === null) {
-      render(this.#filterComponent, this.#filtersContainer);
+      render(this.#filterComponent, this.#filterContainer);
       return;
     }
 
     replace(this.#filterComponent, prevFilterComponent);
     remove(prevFilterComponent);
   }
+
+  #handleModelEvent = () => {
+    this.init();
+  };
+
+  #handleFilterOptionChange = (optionName) => {
+    this.#filterModel.setOption(UpdateType.MAJOR, optionName);
+  };
 }

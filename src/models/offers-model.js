@@ -1,18 +1,41 @@
 export default class OffersModel {
-  #service = null;
-  #offers = null;
+  #offers = [];
+  #offersApiService = null;
+  #isFailed = false;
 
-  constructor(service) {
-    this.#service = service;
-    this.#offers = this.#service.getOffers();
+  constructor({ pointsApiService }) {
+    this.#offersApiService = pointsApiService;
   }
 
   get offers() {
     return this.#offers;
   }
 
-  getByType(type) {
-    return this.#offers
-      .find((item) => item.type === type);
+  get isFailed() {
+    return this.#isFailed;
+  }
+
+  async init() {
+    try {
+      this.#offers = await this.#offersApiService.offers;
+      this.#isFailed = false;
+    } catch(err) {
+      this.#offers = [];
+      this.#isFailed = true;
+    }
+  }
+
+  getOffersByIds(offersIds) {
+    if (offersIds.length === 0) {
+      return [];
+    }
+
+    const allOffers = this.#offers.reduce((accumulator, offersByType) => [...accumulator, ...offersByType.offers], []);
+
+    return offersIds.reduce((accumulator, offerId) => {
+      const chosenOffer = allOffers.find((offer) => offer.id === offerId);
+
+      return (chosenOffer ? [...accumulator, chosenOffer] : accumulator);
+    }, []);
   }
 }

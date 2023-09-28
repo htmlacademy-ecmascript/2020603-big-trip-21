@@ -1,75 +1,91 @@
-import { remove, render, RenderPosition } from '../framework/render.js';
-import PointEditView from '../view/points-view/point-edit-view.js';
-import { UserAction, UpdateType } from '../const.js';
+import { UpdateType, UserAction } from '../const';
+import { RenderPosition, remove, render } from '../framework/render';
+import { isEscapeKeydown } from '../utils/common.js';
+import FormView from '../views/points-view/form-view';
 
 export default class NewPointPresenter {
-  #pointListContainer = null;
-  #pointEditComponent = null;
+  #pointsListContainer = null;
+  #formComponent = null;
 
-  #pointDestinations = null;
-  #pointOffers = null;
+  #offers = null;
+  #destinations = null;
 
   #handleDataChange = null;
   #handleDestroy = null;
 
-  constructor({ pointDestinations, pointOffers, pointListContainer, onDataChange, onDestroy }) {
-    this.#pointDestinations = pointDestinations;
-    this.#pointOffers = pointOffers;
-    this.#pointListContainer = pointListContainer;
+  constructor({ pointsListContainer, offers, destinations, onDataChange, onDestroy}) {
+    this.#pointsListContainer = pointsListContainer;
+    this.#offers = offers;
+    this.#destinations = destinations;
     this.#handleDataChange = onDataChange;
     this.#handleDestroy = onDestroy;
   }
 
-  // Обработчики START
-  #formSubmitHandler = (point) => {
-    this.#handleDataChange(
-      UserAction.ADD_POINT,
-      UpdateType.MINOR,
-      {id: crypto.randomUUID(), ...point},
-    );
-    this.destroy();
-  };
-
-  #deleteClickHandler = () => {
-    this.destroy();
-  };
-
-  #escKeyDownHandler = (evt) => {
-    if (evt.key === 'Escape' || evt.key === 'Esc') {
-      evt.preventDefault();
-      this.destroy();
-    }
-  };
-  // Обработчики END
-
   init() {
-    if (this.#pointEditComponent !== null) {
+    if (this.#formComponent !== null) {
       return;
     }
 
-    this.#pointEditComponent = new PointEditView({
-      pointDestinations: this.#pointDestinations.destinations,
-      pointOffers: this.#pointOffers.offers,
-      onFormSubmit: this.#formSubmitHandler,
-      onDeleteClick: this.#deleteClickHandler,
-      isNewPoint: true
+    this.#formComponent = new FormView({
+      offers: this.#offers,
+      destinations: this.#destinations,
+      onFormSubmit: this.#handleFormSubmit,
+      onDeleteClick: this.#handleCloseClick,
+      onCloseClick: this.#handleCloseClick,
     });
 
-    render(this.#pointEditComponent, this.#pointListContainer.element, RenderPosition.AFTERBEGIN);
-
+    render(this.#formComponent, this.#pointsListContainer, RenderPosition.AFTERBEGIN);
+    this.#formComponent.setDatePicker();
     document.addEventListener('keydown', this.#escKeyDownHandler);
   }
 
   destroy() {
-    if (this.#pointEditComponent === null) {
+    if (this.#formComponent === null) {
       return;
     }
 
+
+    remove(this.#formComponent);
+    this.#formComponent = null;
     this.#handleDestroy();
-
-    remove(this.#pointEditComponent);
-    this.#pointEditComponent = null;
-
     document.removeEventListener('keydown', this.#escKeyDownHandler);
   }
+
+  setSaving() {
+    this.#formComponent.updateElement({
+      isDisabled: true,
+      isSaving: true,
+    });
+  }
+
+  setAborting() {
+    const resetFormState = () => {
+      this.#formComponent.updateElement({
+        isDisabled: false,
+        isSaving: false,
+        isDeleting: false,
+      });
+    };
+
+    this.#formComponent.shake(resetFormState);
+  }
+
+  #handleFormSubmit = (point) => {
+    this.#handleDataChange(
+      UserAction.ADD_POINT,
+      UpdateType.MINOR,
+      point,
+    );
+  };
+
+  #handleCloseClick = () => {
+    this.destroy();
+  };
+
+  #escKeyDownHandler = (evt) => {
+    if (isEscapeKeydown(evt.key)) {
+      evt.preventDefault();
+      this.destroy();
+    }
+  };
 }
