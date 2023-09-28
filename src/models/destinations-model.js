@@ -1,18 +1,31 @@
 export default class DestinationsModel {
-  #service = null;
-  #destinations = null;
+  #destinations = [];
+  #destinationsApiService = null;
+  #isFailed = false;
 
-  constructor(service) {
-    this.#service = service;
-    this.#destinations = this.#service.getDestinations();
+  constructor({ pointsApiService }) {
+    this.#destinationsApiService = pointsApiService;
   }
 
   get destinations() {
     return this.#destinations;
   }
 
-  getById(id) {
-    return this.#destinations
-      .find((item) => item.id === id);
+  get isFailed() {
+    return this.#isFailed;
+  }
+
+  async init() {
+    try {
+      this.#destinations = await this.#destinationsApiService.destinations;
+      this.#isFailed = false;
+    } catch(err) {
+      this.#destinations = [];
+      this.#isFailed = true;
+    }
+  }
+
+  getDestinationById(id) {
+    return this.#destinations.find((destination) => destination.id === id);
   }
 }

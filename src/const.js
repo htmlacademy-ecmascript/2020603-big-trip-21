@@ -1,113 +1,112 @@
-const CITIES = [
-  'Krasnoyarsk',
-  'Omsk',
-  'Novosibirsk',
-  'Kyzyl',
-  'Abakan',
-  'Irkutsk'
-];
+import { showAll, showFuture, showPast, showPresent } from './utils/filters';
+import { compareByDateFrom, compareByPrice, compareByDuration } from './utils/sorting';
 
-const PICTURES_DESCRIPTIONS = [
-  'Lorem ipsum dolor sit amet.',
-  'Phasellus eros mauris.',
-  'In rutrum ac purus sit amet tempus.'
-];
-
-const DESTINATIONS_DESCRIPTIONS = [
-  'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras aliquet varius magna, non porta ligula feugiat eget. Fusce tristique felis at fermentum pharetra. Aliquam id orci ut lectus varius viverra.',
-  'Phasellus eros mauris, condimentum sed nibh vitae, sodales efficitur ipsum. Sed blandit, eros vel aliquam faucibus, purus ex euismod diam, eu luctus nunc ante ut dui. Sed sed nisi sed augue convallis suscipit in sed felis.',
-  'Aliquam erat volutpat. Nunc fermentum tortor ac porta dapibus. In rutrum ac purus sit amet tempus.'
-];
-
-const TYPEPOINTS = [
-  'taxi',
-  'bus',
-  'train',
-  'ship',
-  'drive',
-  'flight',
-  'check-in',
-  'sightseeing',
-  'restaurant',
-];
-
-const DateFormat = {
-  FULL_DATE: 'DD/MM/YY HH:mm',
-  HOUR_MINUTE: 'HH:mm',
-  MONTH_DAY: 'MMM DD',
-};
+export const AUTHORIZATION = 'Basic loremipsum2023';
+export const END_POINT = 'https://21.objects.pages.academy/big-trip';
 
 const DEFAULT_TYPE = 'flight';
 
-const POINT_EMPTY = {
+export const POINT_EMPTY = {
   basePrice: 0,
   dateFrom: null,
   dateTo: null,
-  destination: null,
+  destination: '',
   isFavorite: false,
   offers: [],
-  type: DEFAULT_TYPE,
+  type: DEFAULT_TYPE
 };
 
-const OfferPrice = {
-  MIN: 1,
-  MAX: 100
-};
+export const POINT_TYPES = ['Taxi', 'Bus', 'Train', 'Ship', 'Drive', 'Flight', 'Check-in', 'Sightseeing', 'Restaurant'];
 
-const Duration = {
-  MIN: 59,
-  DAY: 7,
-  HOUR: 23
-};
+export const NO_POINTS_MESSAGE = 'Failed to load latest route information';
 
-const FilterType = {
-  EVERYTHING: 'everything',
-  FUTURE: 'future',
-  PRESENT: 'present',
-  PAST: 'past'
-};
+export const FILTER_OPTIONS = [
+  {
+    name: 'everything',
+    filterCb: showAll,
+    noPointsMessage: 'Click New Event to create your first point',
+  },
+  {
+    name: 'future',
+    filterCb: showFuture,
+    noPointsMessage: 'There are no future events now',
+  },
+  {
+    name: 'present',
+    filterCb: showPresent,
+    noPointsMessage: 'There are no present events now',
+  },
+  {
+    name: 'past',
+    filterCb: showPast,
+    noPointsMessage: 'There are no past events now',
+  },
+];
 
-const SortType = {
-  DAY: 'day',
-  EVENT: 'event',
-  TIME: 'time',
-  PRICE: 'price',
-  OFFER: 'offer'
-};
+export const DEFAULT_FILTER_OPTION = FILTER_OPTIONS[0];
 
-const UserAction = {
+export const SORT_OPTIONS = [
+  {
+    name: 'day',
+    sortCb: compareByDateFrom,
+    isDisable: false,
+  },
+  {
+    name: 'event',
+    sortCb: null,
+    isDisable: true,
+  },
+  {
+    name: 'time',
+    sortCb: compareByDuration,
+    isDisable: false,
+  },
+  {
+    name: 'price',
+    sortCb: compareByPrice,
+    isDisable: false,
+  },
+  {
+    name: 'offers',
+    sortCb: null,
+    isDisable: true,
+  },
+];
+
+export const DEFAULT_SORT_OPTION = SORT_OPTIONS[0];
+
+export const UserAction = {
   UPDATE_POINT: 'UPDATE_POINT',
   ADD_POINT: 'ADD_POINT',
   DELETE_POINT: 'DELETE_POINT',
 };
 
-const UpdateType = {
+export const UpdateType = {
   PATCH: 'PATCH',
   MINOR: 'MINOR',
   MAJOR: 'MAJOR',
+  INIT: 'INIT',
 };
 
-const enabledSortType = {
-  [SortType.DAY]: true,
-  [SortType.EVENT]: false,
-  [SortType.TIME]: true,
-  [SortType.PRICE]: true,
-  [SortType.OFFER]: false
+export const Method = {
+  GET: 'GET',
+  PUT: 'PUT',
+  POST: 'POST',
+  DELETE: 'DELETE',
 };
 
-export {
-  TYPEPOINTS,
-  DateFormat,
-  DEFAULT_TYPE,
-  CITIES,
-  POINT_EMPTY,
-  OfferPrice,
-  DESTINATIONS_DESCRIPTIONS,
-  PICTURES_DESCRIPTIONS,
-  Duration,
-  FilterType,
-  SortType,
-  enabledSortType,
-  UserAction,
-  UpdateType
+export const Mode = {
+  DEFAULT: 'DEFAULT',
+  EDITING: 'EDITING',
+};
+
+export const UrlPath = {
+  POINTS: 'points',
+  OFFERS: 'offers',
+  DESTINATIONS: 'destinations',
+};
+
+export const TimeLimit = {
+  LOWER_LIMIT: 350,
+  UPPER_LIMIT: 1000,
 };
