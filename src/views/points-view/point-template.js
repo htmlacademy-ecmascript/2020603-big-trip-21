@@ -26,12 +26,14 @@ export function createTemplate(point, offers, destination) {
   const pointPrice = he.encode(String(point.basePrice));
 
   const dateStart = getFormattedDate(dateFrom, 'MMM DD');
+  const dateTimeStart = getFormattedDate(dateFrom, 'YYYY-MM-DD');
+  const dateTimeEnd = getFormattedDate(dateTo, 'YYYY-MM-DD');
   const timeStart = getFormattedDate(dateFrom, 'HH:mm');
   const timeEnd = getFormattedDate(dateTo, 'HH:mm');
   const duration = formateDuration(getDuration(dateFrom, dateTo));
   const favoriteClass = (isFavorite) ? 'event__favorite-btn--active' : '';
 
-  const offersTemplate = offers.reduce((markup, offer) => `${markup}
+  const offersTemplate = offers.reduce((template, offer) => `${template}
       <li class="event__offer">
         <span class="event__offer-title">${he.encode(offer.title)}</span>
         +&euro;&nbsp;
@@ -42,16 +44,16 @@ export function createTemplate(point, offers, destination) {
   return /*html*/`
     <li class="trip-events__item">
       <div class="event">
-        <time class="event__date" datetime="2019-03-18">${dateStart}</time>
+        <time class="event__date" datetime="${dateTimeStart}">${dateStart}</time>
         <div class="event__type">
           <img class="event__type-icon" width="42" height="42" src="img/icons/${pointType.toLowerCase()}.png" alt="Event type icon">
         </div>
         <h3 class="event__title">${pointType} ${he.encode(destination.name)}</h3>
         <div class="event__schedule">
           <p class="event__time">
-            <time class="event__start-time" datetime="2019-03-18T10:30">${timeStart}</time>
+            <time class="event__start-time" datetime="${dateTimeStart}T${timeStart}">${timeStart}</time>
             —
-            <time class="event__end-time" datetime="2019-03-18T11:00">${timeEnd}</time>
+            <time class="event__end-time" datetime="${dateTimeEnd}T${timeEnd}">${timeEnd}</time>
           </p>
           <p class="event__duration">${duration}</p>
         </div>

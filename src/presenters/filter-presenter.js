@@ -1,6 +1,6 @@
-import {render, replace, remove} from '../framework/render.js';
 import FilterView from '../views/filters-view/filters-view.js';
-import {FILTER_OPTIONS, UpdateType} from '../const.js';
+import { render, replace, remove } from '../framework/render.js';
+import { FILTER_OPTIONS, UpdateType } from '../const.js';
 
 export default class FilterPresenter {
   #filterContainer = null;
@@ -9,7 +9,7 @@ export default class FilterPresenter {
 
   #filterComponent = null;
 
-  constructor({filterContainer, filterModel, pointsModel}) {
+  constructor({ filterContainer, filterModel, pointsModel }) {
     this.#filterContainer = filterContainer;
     this.#filterModel = filterModel;
     this.#pointsModel = pointsModel;

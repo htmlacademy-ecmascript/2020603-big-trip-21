@@ -3,7 +3,7 @@ import { DEFAULT_FILTER_OPTION, DEFAULT_SORT_OPTION, SORT_OPTIONS, TimeLimit, Up
 import UiBlocker from '../framework/ui-blocker/ui-blocker.js';
 import ListView from '../views/points-view/list-view.js';
 import NoPointsView from '../views/points-view/no-points-view.js';
-import SortingView from '../views/sort-view/sort-view.js';
+import SortView from '../views/sort-view/sort-view.js';
 import LoadingView from '../views/loading-view/loading-view.js';
 import NewPointButtonView from '../views/button-view/new-point-button-view.js';
 import PointPresenter from './point-presenter.js';
@@ -115,7 +115,7 @@ export default class BoardPresenter {
   }
 
   #renderSorting() {
-    this.#sortingComponent = new SortingView({
+    this.#sortingComponent = new SortView({
       currentOptionName: this.#currentSortOption.name,
       onOptionChange: this.#handleSortOptionChange
     });
