@@ -37,7 +37,7 @@ export default class PointPresenter {
       offers: this.#offersModel.getOffersByIds(this.#point.offers),
       destination: this.#destinationsModel.getDestinationById(this.#point.destination),
       onEditClick: this.#handleEditClick,
-      onFavoriteClick: this.#handleFavoriteClick,
+      onFavoriteClick: this.#handleFavoriteClick
     });
 
     this.#formComponent = new FormView({
@@ -46,7 +46,7 @@ export default class PointPresenter {
       destinations: this.#destinationsModel.destinations,
       onFormSubmit: this.#handleFormSubmit,
       onDeleteClick: this.#handleDeleteClick,
-      onCloseClick: this.#handleCloseClick,
+      onCloseClick: this.#handleCloseClick
     });
 
     if (prevPointComponent === null || prevFormComponent === null) {
@@ -81,7 +81,7 @@ export default class PointPresenter {
     if (this.#mode === Mode.EDITING) {
       this.#formComponent.updateElement({
         isDisabled: true,
-        isSaving: true,
+        isSaving: true
       });
     }
   }
@@ -90,7 +90,7 @@ export default class PointPresenter {
     if (this.#mode === Mode.EDITING) {
       this.#formComponent.updateElement({
         isDisabled: true,
-        isDeleting: true,
+        isDeleting: true
       });
     }
   }

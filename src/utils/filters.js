@@ -1,5 +1,4 @@
-import { FILTER_OPTIONS } from '../const';
-import { isFutureDate, isPastDate, isTodayDate } from './dates';
+import { isFutureDate, isPastDate, isTodayDate } from './dates.js';
 
 function showAll(point) {
   return point;
@@ -17,11 +16,4 @@ function showPast(point) {
   return isPastDate(point.dateTo);
 }
 
-function calculateFilters(points) {
-  return FILTER_OPTIONS.reduce((accumulator, option) => {
-    accumulator[option.name] = points.filter(option.filterCb).length;
-    return accumulator;
-  }, {});
-}
-
-export {calculateFilters, showAll, showFuture, showPresent, showPast};
+export { showAll, showFuture, showPresent, showPast };
