@@ -1,8 +1,6 @@
 import { getFormattedDate, getDuration } from '../../utils/dates.js';
+import { MINUTES_IN_HOUR, MINUTES_IN_DAY } from '../../const.js';
 import he from 'he';
-
-const MINUTES_IN_HOUR = 60;
-const MINUTES_IN_DAY = 1440;
 
 function formateDuration(durationInMinutes) {
   const days = Math.floor(durationInMinutes / MINUTES_IN_DAY);

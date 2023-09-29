@@ -101,6 +101,9 @@ export const UrlPath = {
   DESTINATIONS: 'destinations',
 };
 
+export const MINUTES_IN_HOUR = 60;
+export const MINUTES_IN_DAY = 1440;
+
 export const TimeLimit = {
   LOWER_LIMIT: 350,
   UPPER_LIMIT: 1000,
