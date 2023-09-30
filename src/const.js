@@ -1,5 +1,5 @@
-import { showAll, showFuture, showPast, showPresent } from './utils/filters';
-import { compareByDateFrom, compareByPrice, compareByDuration } from './utils/sorting';
+import { showAll, showFuture, showPast, showPresent } from './utils/filters.js';
+import { compareByDateFrom, compareByPrice, compareByDuration } from './utils/sorting.js';
 
 export const AUTHORIZATION = 'Basic loremipsum2023';
 export const END_POINT = 'https://21.objects.pages.academy/big-trip';
@@ -24,23 +24,23 @@ export const FILTER_OPTIONS = [
   {
     name: 'everything',
     filterCb: showAll,
-    noPointsMessage: 'Click New Event to create your first point',
+    noPointsMessage: 'Click New Event to create your first point'
   },
   {
     name: 'future',
     filterCb: showFuture,
-    noPointsMessage: 'There are no future events now',
+    noPointsMessage: 'There are no future events now'
   },
   {
     name: 'present',
     filterCb: showPresent,
-    noPointsMessage: 'There are no present events now',
+    noPointsMessage: 'There are no present events now'
   },
   {
     name: 'past',
     filterCb: showPast,
-    noPointsMessage: 'There are no past events now',
-  },
+    noPointsMessage: 'There are no past events now'
+  }
 ];
 
 export const DEFAULT_FILTER_OPTION = FILTER_OPTIONS[0];
@@ -48,29 +48,24 @@ export const DEFAULT_FILTER_OPTION = FILTER_OPTIONS[0];
 export const SORT_OPTIONS = [
   {
     name: 'day',
-    sortCb: compareByDateFrom,
-    isDisable: false,
+    sortCb: compareByDateFrom
   },
   {
     name: 'event',
-    sortCb: null,
-    isDisable: true,
+    sortCb: null
   },
   {
     name: 'time',
-    sortCb: compareByDuration,
-    isDisable: false,
+    sortCb: compareByDuration
   },
   {
     name: 'price',
-    sortCb: compareByPrice,
-    isDisable: false,
+    sortCb: compareByPrice
   },
   {
     name: 'offers',
-    sortCb: null,
-    isDisable: true,
-  },
+    sortCb: null
+  }
 ];
 
 export const DEFAULT_SORT_OPTION = SORT_OPTIONS[0];
@@ -78,35 +73,38 @@ export const DEFAULT_SORT_OPTION = SORT_OPTIONS[0];
 export const UserAction = {
   UPDATE_POINT: 'UPDATE_POINT',
   ADD_POINT: 'ADD_POINT',
-  DELETE_POINT: 'DELETE_POINT',
+  DELETE_POINT: 'DELETE_POINT'
 };
 
 export const UpdateType = {
   PATCH: 'PATCH',
   MINOR: 'MINOR',
   MAJOR: 'MAJOR',
-  INIT: 'INIT',
+  INIT: 'INIT'
 };
 
 export const Method = {
   GET: 'GET',
   PUT: 'PUT',
   POST: 'POST',
-  DELETE: 'DELETE',
+  DELETE: 'DELETE'
 };
 
 export const Mode = {
   DEFAULT: 'DEFAULT',
-  EDITING: 'EDITING',
+  EDITING: 'EDITING'
 };
 
 export const UrlPath = {
   POINTS: 'points',
   OFFERS: 'offers',
-  DESTINATIONS: 'destinations',
+  DESTINATIONS: 'destinations'
 };
+
+export const MINUTES_IN_HOUR = 60;
+export const MINUTES_IN_DAY = 1440;
 
 export const TimeLimit = {
   LOWER_LIMIT: 350,
-  UPPER_LIMIT: 1000,
+  UPPER_LIMIT: 1000
 };

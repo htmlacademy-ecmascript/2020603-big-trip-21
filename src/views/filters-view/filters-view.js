@@ -6,7 +6,7 @@ export default class FilterView extends AbstractView {
   #currentOptionName = null;
   #handleOptionChange = null;
 
-  constructor ({ filters, currentOptionName, onOptionChange }) {
+  constructor({ filters, currentOptionName, onOptionChange }) {
     super();
     this.#filters = filters;
     this.#currentOptionName = currentOptionName;
@@ -20,7 +20,6 @@ export default class FilterView extends AbstractView {
   }
 
   #optionChangeHandler = (evt) => {
-    evt.preventDefault();
     this.#handleOptionChange(evt.target.value);
   };
 }

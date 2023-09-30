@@ -5,11 +5,11 @@ import { createTemplate } from './no-points-template.js';
 export default class NoPointsView extends AbstractView {
   #message = NO_POINTS_MESSAGE;
 
-  setMessage(message = NO_POINTS_MESSAGE) {
-    this.#message = message;
-  }
-
   get template() {
     return createTemplate(this.#message);
+  }
+
+  setMessage(message = NO_POINTS_MESSAGE) {
+    this.#message = message;
   }
 }

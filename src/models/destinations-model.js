@@ -19,7 +19,7 @@ export default class DestinationsModel {
     try {
       this.#destinations = await this.#destinationsApiService.destinations;
       this.#isFailed = false;
-    } catch(err) {
+    } catch (err) {
       this.#destinations = [];
       this.#isFailed = true;
     }

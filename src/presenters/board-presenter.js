@@ -3,7 +3,7 @@ import { DEFAULT_FILTER_OPTION, DEFAULT_SORT_OPTION, SORT_OPTIONS, TimeLimit, Up
 import UiBlocker from '../framework/ui-blocker/ui-blocker.js';
 import ListView from '../views/points-view/list-view.js';
 import NoPointsView from '../views/points-view/no-points-view.js';
-import SortingView from '../views/sort-view/sort-view.js';
+import SortView from '../views/sort-view/sort-view.js';
 import LoadingView from '../views/loading-view/loading-view.js';
 import NewPointButtonView from '../views/button-view/new-point-button-view.js';
 import PointPresenter from './point-presenter.js';
@@ -60,101 +60,6 @@ export default class BoardPresenter {
     return filteredPoints.sort(this.#currentSortOption.sortCb);
   }
 
-  init() {
-    this.#newPointButtonComponent = new NewPointButtonView({
-      onClick: this.#handleNewEventButtonClick
-    });
-    render(this.#newPointButtonComponent, this.#headerContainer);
-    this.#renderBoard();
-  }
-
-  #renderBoard() {
-    if (this.#isLoading) {
-      this.#disableNewPointButton(true);
-      render(this.#loadingComponent, this.#boardContainer, RenderPosition.AFTERBEGIN);
-
-      return;
-    }
-
-    if(this.#pointsModel.isFailed || this.#offersModel.isFailed || this.#destinationsModel.isFailed) {
-      this.#disableNewPointButton(true);
-      this.#renderNoPoints();
-
-      return;
-    }
-
-    this.#disableNewPointButton(false);
-    render(this.#listComponent, this.#boardContainer);
-
-    this.#newPointPresenter = new NewPointPresenter({
-      pointsListContainer: this.#listComponent.element,
-      offers: this.#offersModel.offers,
-      destinations: this.#destinationsModel.destinations,
-      onDataChange: this.#handleViewAction,
-      onDestroy: this.#handleNewPointDestroy,
-    });
-
-    if (this.points.length === 0 && !this.#isCreating) {
-      const currentFiltration = this.#filterModel.currentOption;
-      this.#renderNoPoints(currentFiltration.noPointsMessage);
-
-      return;
-    }
-
-    this.#renderSorting();
-    this.points.forEach((point) => this.#renderPoint(point));
-  }
-
-  #disableNewPointButton(isDisable) {
-    this.#newPointButtonComponent.element.disabled = isDisable;
-  }
-
-  #renderNoPoints(message) {
-    this.#noPointsComponent.setMessage(message);
-    render(this.#noPointsComponent, this.#boardContainer);
-  }
-
-  #renderSorting() {
-    this.#sortingComponent = new SortingView({
-      currentOptionName: this.#currentSortOption.name,
-      onOptionChange: this.#handleSortOptionChange
-    });
-    render(this.#sortingComponent, this.#boardContainer, RenderPosition.AFTERBEGIN);
-  }
-
-  #renderPoint(point) {
-    const pointPresenter = new PointPresenter({
-      pointsListContainer: this.#listComponent.element,
-      offersModel: this.#offersModel,
-      destinationsModel: this.#destinationsModel,
-      onPointChange: this.#handleViewAction,
-      onModeChange: this.#handleModeChange,
-    });
-    pointPresenter.init(point);
-    this.#pointsPresenters.set(point.id, pointPresenter);
-  }
-
-  #clearBoard(resetSortType = false) {
-    this.#newPointPresenter.destroy();
-    this.#pointsPresenters.forEach((presenter) => presenter.destroy());
-    this.#pointsPresenters.clear();
-
-    remove(this.#sortingComponent);
-    remove(this.#noPointsComponent);
-    remove(this.#loadingComponent);
-
-    if (resetSortType) {
-      this.#currentSortOption = DEFAULT_SORT_OPTION;
-    }
-  }
-
-  #createPoint() {
-    this.#isCreating = true;
-    this.#handleSortOptionChange();
-    this.#filterModel.setOption(UpdateType.MAJOR, DEFAULT_FILTER_OPTION.name);
-    this.#newPointPresenter.init();
-  }
-
   #handleViewAction = async (actionType, updateType, update) => {
     this.#uiBlocker.block();
     switch (actionType) {
@@ -163,7 +68,7 @@ export default class BoardPresenter {
         this.#pointEditingId = null;
         try {
           await this.#pointsModel.updatePoint(updateType, update);
-        } catch(err) {
+        } catch (err) {
           this.#pointsPresenters.get(update.id).setAborting();
         }
         break;
@@ -172,7 +77,7 @@ export default class BoardPresenter {
         this.#pointEditingId = null;
         try {
           await this.#pointsModel.addPoint(updateType, update);
-        } catch(err) {
+        } catch (err) {
           this.#newPointPresenter.setAborting();
         }
         break;
@@ -181,7 +86,7 @@ export default class BoardPresenter {
         this.#pointEditingId = null;
         try {
           await this.#pointsModel.deletePoint(updateType, update);
-        } catch(err) {
+        } catch (err) {
           this.#pointsPresenters.get(update.id).setAborting();
         }
         break;
@@ -191,17 +96,17 @@ export default class BoardPresenter {
     this.#uiBlocker.unblock();
   };
 
-  #handleModelEvent = (updateType, data) => {
+  #handleModelEvent = (updateType, point) => {
     switch (updateType) {
       case UpdateType.PATCH:
-        this.#pointsPresenters.get(data.id).init(data);
+        this.#pointsPresenters.get(point.id).init(point);
         break;
       case UpdateType.MINOR:
         this.#clearBoard();
         this.#renderBoard();
         break;
       case UpdateType.MAJOR:
-        this.#clearBoard({resetSortType: true});
+        this.#clearBoard({ resetSortType: true });
         this.#renderBoard();
         break;
       case UpdateType.INIT:
@@ -255,4 +160,99 @@ export default class BoardPresenter {
     this.#disableNewPointButton(true);
     this.#pointEditingId = null;
   };
+
+  init() {
+    this.#newPointButtonComponent = new NewPointButtonView({
+      onClick: this.#handleNewEventButtonClick
+    });
+    render(this.#newPointButtonComponent, this.#headerContainer);
+    this.#renderBoard();
+  }
+
+  #renderBoard() {
+    if (this.#isLoading) {
+      this.#disableNewPointButton(true);
+      render(this.#loadingComponent, this.#boardContainer, RenderPosition.AFTERBEGIN);
+
+      return;
+    }
+
+    if (this.#pointsModel.isFailed || this.#offersModel.isFailed || this.#destinationsModel.isFailed) {
+      this.#disableNewPointButton(true);
+      this.#renderNoPoints();
+
+      return;
+    }
+
+    this.#disableNewPointButton(false);
+    render(this.#listComponent, this.#boardContainer);
+
+    this.#newPointPresenter = new NewPointPresenter({
+      pointsListContainer: this.#listComponent.element,
+      offers: this.#offersModel.offers,
+      destinations: this.#destinationsModel.destinations,
+      onDataChange: this.#handleViewAction,
+      onDestroy: this.#handleNewPointDestroy,
+    });
+
+    if (this.points.length === 0 && !this.#isCreating) {
+      const currentFiltration = this.#filterModel.currentOption;
+      this.#renderNoPoints(currentFiltration.noPointsMessage);
+
+      return;
+    }
+
+    this.#renderSorting();
+    this.points.forEach((point) => this.#renderPoint(point));
+  }
+
+  #disableNewPointButton(isDisable) {
+    this.#newPointButtonComponent.element.disabled = isDisable;
+  }
+
+  #renderNoPoints(message) {
+    this.#noPointsComponent.setMessage(message);
+    render(this.#noPointsComponent, this.#boardContainer);
+  }
+
+  #renderSorting() {
+    this.#sortingComponent = new SortView({
+      currentOptionName: this.#currentSortOption.name,
+      onOptionChange: this.#handleSortOptionChange
+    });
+    render(this.#sortingComponent, this.#boardContainer, RenderPosition.AFTERBEGIN);
+  }
+
+  #renderPoint(point) {
+    const pointPresenter = new PointPresenter({
+      pointsListContainer: this.#listComponent.element,
+      offersModel: this.#offersModel,
+      destinationsModel: this.#destinationsModel,
+      onPointChange: this.#handleViewAction,
+      onModeChange: this.#handleModeChange,
+    });
+    pointPresenter.init(point);
+    this.#pointsPresenters.set(point.id, pointPresenter);
+  }
+
+  #clearBoard(resetSortType = false) {
+    this.#newPointPresenter.destroy();
+    this.#pointsPresenters.forEach((presenter) => presenter.destroy());
+    this.#pointsPresenters.clear();
+
+    remove(this.#sortingComponent);
+    remove(this.#noPointsComponent);
+    remove(this.#loadingComponent);
+
+    if (resetSortType) {
+      this.#currentSortOption = DEFAULT_SORT_OPTION;
+    }
+  }
+
+  #createPoint() {
+    this.#isCreating = true;
+    this.#handleSortOptionChange();
+    this.#filterModel.setOption(UpdateType.MAJOR, DEFAULT_FILTER_OPTION.name);
+    this.#newPointPresenter.init();
+  }
 }

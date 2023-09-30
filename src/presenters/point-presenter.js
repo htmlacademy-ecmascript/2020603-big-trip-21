@@ -26,6 +26,46 @@ export default class PointPresenter {
     this.#handleModeChange = onModeChange;
   }
 
+  #handleEditClick = () => {
+    this.#replacePointToForm();
+  };
+
+  #handleFormSubmit = (point) => {
+    this.#handlePointChange(
+      UserAction.UPDATE_POINT,
+      UpdateType.MINOR,
+      point,
+    );
+  };
+
+  #handleFavoriteClick = () => {
+    this.#handlePointChange(
+      UserAction.UPDATE_POINT,
+      UpdateType.MINOR,
+      { ...this.#point, isFavorite: !this.#point.isFavorite },
+    );
+  };
+
+  #handleDeleteClick = (point) => {
+    this.#handlePointChange(
+      UserAction.DELETE_POINT,
+      UpdateType.MINOR,
+      point,
+    );
+  };
+
+  #handleCloseClick = () => {
+    this.closeForm();
+  };
+
+  #escKeyDownHandler = (evt) => {
+    if (!isEscapeKeydown(evt.key)) {
+      return;
+    }
+    evt.preventDefault();
+    this.closeForm();
+  };
+
   init(point) {
     this.#point = point;
 
@@ -68,6 +108,7 @@ export default class PointPresenter {
   }
 
   destroy() {
+    document.removeEventListener('keydown', this.#escKeyDownHandler);
     remove(this.#pointComponent);
     remove(this.#formComponent);
   }
@@ -87,6 +128,7 @@ export default class PointPresenter {
   }
 
   setDeleting() {
+    document.removeEventListener('keydown', this.#escKeyDownHandler);
     if (this.#mode === Mode.EDITING) {
       this.#formComponent.updateElement({
         isDisabled: true,
@@ -126,45 +168,5 @@ export default class PointPresenter {
     this.#mode = Mode.DEFAULT;
     this.#handleModeChange(this.#point.id, this.#mode);
   }
-
-  #handleEditClick = () => {
-    this.#replacePointToForm();
-  };
-
-  #handleFormSubmit = (point) => {
-    this.#handlePointChange(
-      UserAction.UPDATE_POINT,
-      UpdateType.MINOR,
-      point,
-    );
-  };
-
-  #handleFavoriteClick = () => {
-    this.#handlePointChange(
-      UserAction.UPDATE_POINT,
-      UpdateType.MINOR,
-      {...this.#point, isFavorite: !this.#point.isFavorite},
-    );
-  };
-
-  #handleDeleteClick = (point) => {
-    this.#handlePointChange(
-      UserAction.DELETE_POINT,
-      UpdateType.MINOR,
-      point,
-    );
-  };
-
-  #handleCloseClick = () => {
-    this.closeForm();
-  };
-
-  #escKeyDownHandler = (evt) => {
-    if(!isEscapeKeydown(evt.key)) {
-      return;
-    }
-    evt.preventDefault();
-    this.closeForm();
-  };
 
 }

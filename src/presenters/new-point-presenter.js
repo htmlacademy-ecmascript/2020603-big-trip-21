@@ -13,13 +13,32 @@ export default class NewPointPresenter {
   #handleDataChange = null;
   #handleDestroy = null;
 
-  constructor({ pointsListContainer, offers, destinations, onDataChange, onDestroy}) {
+  constructor({ pointsListContainer, offers, destinations, onDataChange, onDestroy }) {
     this.#pointsListContainer = pointsListContainer;
     this.#offers = offers;
     this.#destinations = destinations;
     this.#handleDataChange = onDataChange;
     this.#handleDestroy = onDestroy;
   }
+
+  #handleFormSubmit = (point) => {
+    this.#handleDataChange(
+      UserAction.ADD_POINT,
+      UpdateType.MINOR,
+      point,
+    );
+  };
+
+  #handleCloseClick = () => {
+    this.destroy();
+  };
+
+  #escKeyDownHandler = (evt) => {
+    if (isEscapeKeydown(evt.key)) {
+      evt.preventDefault();
+      this.destroy();
+    }
+  };
 
   init() {
     if (this.#formComponent !== null) {
@@ -69,23 +88,4 @@ export default class NewPointPresenter {
 
     this.#formComponent.shake(resetFormState);
   }
-
-  #handleFormSubmit = (point) => {
-    this.#handleDataChange(
-      UserAction.ADD_POINT,
-      UpdateType.MINOR,
-      point,
-    );
-  };
-
-  #handleCloseClick = () => {
-    this.destroy();
-  };
-
-  #escKeyDownHandler = (evt) => {
-    if (isEscapeKeydown(evt.key)) {
-      evt.preventDefault();
-      this.destroy();
-    }
-  };
 }
