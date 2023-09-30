@@ -25,7 +25,7 @@ export default class PointsModel extends Observable {
       const points = await this.#pointsApiService.points;
       this.#points = points.map(PointAdapter.adaptToClient);
       this.#isFailed = false;
-    } catch(err) {
+    } catch (err) {
       this.#points = [];
       this.#isFailed = true;
     }
@@ -43,14 +43,14 @@ export default class PointsModel extends Observable {
     try {
       const response = await this.#pointsApiService.updatePoint(update);
       const updatedPoint = PointAdapter.adaptToClient(response);
-      // this.#points = this.#points.map((point) => point.id === update.id ? update : point);
+
       this.#points = [
         ...this.#points.slice(0, index),
         updatedPoint,
         ...this.#points.slice(index + 1)
       ];
       this._notify(updateType, update);
-    } catch(err) {
+    } catch (err) {
       throw new Error('Can\'t update point');
     }
   }
@@ -64,7 +64,7 @@ export default class PointsModel extends Observable {
         ...this.#points
       ];
       this._notify(updateType, update);
-    } catch(err) {
+    } catch (err) {
       throw new Error('Can\'t add point');
     }
   }
@@ -80,7 +80,7 @@ export default class PointsModel extends Observable {
       await this.#pointsApiService.deletePoint(update);
       this.#points = this.#points.filter((point) => point.id !== update.id);
       this._notify(updateType);
-    } catch(err) {
+    } catch (err) {
       throw new Error('Can\'t delete task');
     }
   }

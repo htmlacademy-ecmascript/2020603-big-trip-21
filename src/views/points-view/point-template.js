@@ -1,10 +1,8 @@
 import { getFormattedDate, getDuration } from '../../utils/dates.js';
+import { MINUTES_IN_HOUR, MINUTES_IN_DAY } from '../../const.js';
 import he from 'he';
 
-const MINUTES_IN_HOUR = 60;
-const MINUTES_IN_DAY = 1440;
-
-function formateDuration(durationInMinutes) {
+function getDurationMessage(durationInMinutes) {
   const days = Math.floor(durationInMinutes / MINUTES_IN_DAY);
   const hours = Math.floor(durationInMinutes % MINUTES_IN_DAY / MINUTES_IN_HOUR);
   const minutes = Math.floor(durationInMinutes % MINUTES_IN_HOUR);
@@ -30,7 +28,7 @@ export function createTemplate(point, offers, destination) {
   const dateTimeEnd = getFormattedDate(dateTo, 'YYYY-MM-DD');
   const timeStart = getFormattedDate(dateFrom, 'HH:mm');
   const timeEnd = getFormattedDate(dateTo, 'HH:mm');
-  const duration = formateDuration(getDuration(dateFrom, dateTo));
+  const durationMessage = getDurationMessage(getDuration(dateFrom, dateTo));
   const favoriteClass = (isFavorite) ? 'event__favorite-btn--active' : '';
 
   const offersTemplate = offers.reduce((template, offer) => `${template}
@@ -41,7 +39,7 @@ export function createTemplate(point, offers, destination) {
       </li>
     `, '');
 
-  return /*html*/`
+  return `
     <li class="trip-events__item">
       <div class="event">
         <time class="event__date" datetime="${dateTimeStart}">${dateStart}</time>
@@ -55,7 +53,7 @@ export function createTemplate(point, offers, destination) {
             —
             <time class="event__end-time" datetime="${dateTimeEnd}T${timeEnd}">${timeEnd}</time>
           </p>
-          <p class="event__duration">${duration}</p>
+          <p class="event__duration">${durationMessage}</p>
         </div>
         <p class="event__price">
           &euro;&nbsp;<span class="event__price-value">${pointPrice}</span>

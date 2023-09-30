@@ -5,7 +5,7 @@ export default class SortView extends AbstractView {
   #handleOptionChange = null;
   #currentOptionName = null;
 
-  constructor({currentOptionName, onOptionChange}) {
+  constructor({ currentOptionName, onOptionChange }) {
     super();
     this.#currentOptionName = currentOptionName;
     this.#handleOptionChange = onOptionChange;

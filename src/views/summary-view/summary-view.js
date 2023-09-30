@@ -4,16 +4,16 @@ import { createTemplate } from './summary-template.js';
 export default class SummaryView extends AbstractView {
   #cities = '';
   #dates = '';
-  #wholePrice = 0;
+  #totalPrice = 0;
 
-  constructor ({cities, dates, wholePrice}) {
+  constructor({ cities, dates, totalPrice }) {
     super();
     this.#cities = cities;
     this.#dates = dates;
-    this.#wholePrice = wholePrice;
+    this.#totalPrice = totalPrice;
   }
 
   get template() {
-    return createTemplate(this.#cities, this.#dates, this.#wholePrice);
+    return createTemplate(this.#cities, this.#dates, this.#totalPrice);
   }
 }

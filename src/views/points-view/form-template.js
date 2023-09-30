@@ -12,7 +12,7 @@ function createOffersTemplate(point, offers) {
 
   const disableStatus = point.isDisabled ? 'disabled' : '';
 
-  const offersTemplate = offersByType.map((offer) => /*html*/`
+  const offersTemplate = offersByType.map((offer) => `
     <div class="event__offer-selector">
       <input class="event__offer-checkbox  visually-hidden" type="checkbox" name="event-offer-luggage"
         id="event-offer-${point.id ? he.encode(point.id) : ''}-${he.encode(offer.id)}"
@@ -28,7 +28,7 @@ function createOffersTemplate(point, offers) {
     </div>
   `).join(' ');
 
-  return /*html*/`
+  return `
     <section class="event__section  event__section--offers">
       <h3 class="event__section-title  event__section-title--offers">Offers</h3>
 
@@ -43,11 +43,11 @@ function createPicturesTemplate(pictures) {
   if (pictures.length === 0) {
     return '';
   }
-  const picturesTemplate = pictures.map(({ src, description }) => /*html*/`
+  const picturesTemplate = pictures.map(({ src, description }) => `
     <img class="event__photo" src="${he.encode(src)}" alt="${he.encode(description)}"></img>
   `).join(' ');
 
-  return /*html*/`
+  return `
     <div class="event__photos-container">
       <div class="event__photos-tape">
         ${picturesTemplate}
@@ -69,7 +69,7 @@ function createDestinationTemplate(pointDestination) {
       ${he.encode(pointDestination.description)}
     </p>`;
 
-  return /*html*/`
+  return `
     <section class="event__section  event__section--destination">
       <h3 class="event__section-title  event__section-title--destination">Destination</h3>
       ${descriptionTemplate}
@@ -96,22 +96,25 @@ export function createTemplate(point, allOffers, allDestinations) {
 
   const disableStatus = point.isDisabled ? 'disabled' : '';
 
-  const pointIconTemplate = POINT_TYPES.map((type) => /*html*/`
+  const pointIconTemplate = POINT_TYPES.map((type) => `
       <div class="event__type-item">
-        <input class="event__type-input  visually-hidden" type="radio" name="event-type"
+        <input class="event__type-input  visually-hidden"
+          type="radio" name="event-type"
           id="event-type-${type.toLowerCase()}-${pointId}"
           value="${type}"
           ${pointType === type.toLowerCase() ? 'checked' : ''}
         >
-        <label class="event__type-label  event__type-label--${type.toLowerCase()}" for="event-type-${type.toLowerCase()}-${pointId}">${type}</label>
+        <label class="event__type-label  event__type-label--${type.toLowerCase()}"
+          for="event-type-${type.toLowerCase()}-${pointId}">${type}
+        </label>
       </div>
     `).join(' ');
 
-  const destinationsNamesTemplate = allDestinations.map((destination) => /*html*/`
+  const destinationsNamesTemplate = allDestinations.map((destination) => `
     <option value="${he.encode(destination.name)}"></option>
     `).join(' ');
 
-  return /*html*/`
+  return `
     <li class="trip-events__item">
       <form class="event event--edit" action="#" method="post">
         <header class="event__header">

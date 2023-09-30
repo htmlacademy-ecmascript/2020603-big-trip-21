@@ -19,7 +19,7 @@ export default class OffersModel {
     try {
       this.#offers = await this.#offersApiService.offers;
       this.#isFailed = false;
-    } catch(err) {
+    } catch (err) {
       this.#offers = [];
       this.#isFailed = true;
     }

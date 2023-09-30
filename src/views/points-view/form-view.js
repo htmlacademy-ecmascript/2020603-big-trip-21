@@ -30,39 +30,6 @@ export default class FormView extends AbstractStatefulView {
     return createTemplate(this._state, this.#offers, this.#destinations);
   }
 
-  updateElement(update) {
-    super.updateElement(update);
-    this.setDatePicker();
-  }
-
-  removeElement() {
-    super.removeElement();
-
-    if(this.#datepickerFrom) {
-      this.#datepickerFrom.destroy();
-      this.#datepickerFrom = null;
-    }
-
-    if(this.#datepickerTo) {
-      this.#datepickerTo.destroy();
-      this.#datepickerTo = null;
-    }
-  }
-
-  _restoreHandlers() {
-    this.element.querySelector('form').addEventListener('submit', this.#formSubmitHandler);
-    this.element.querySelector('.event__type-group').addEventListener('change', this.#typeChangeHandler);
-    this.element.querySelector('.event__input--destination').addEventListener('change', this.#destinationChangeHandler);
-    this.element.querySelector('.event__input--price').addEventListener('change', this.#priceChangeHandler);
-    this.element.querySelector('.event__details').addEventListener('click', this.#offersChangeHandler);
-    this.element.querySelector('.event__reset-btn').addEventListener('click', this.#formDeleteClickHandler);
-    this.element.querySelector('.event__rollup-btn')?.addEventListener('click', this.#formCloseClickHandler);
-  }
-
-  reset(point) {
-    this.updateElement(FormView.parsePointToState(point),);
-  }
-
   #validateForm() {
     this.element.querySelector('.event__save-btn').disabled = !isFormValid(this._state);
   }
@@ -88,7 +55,7 @@ export default class FormView extends AbstractStatefulView {
 
   #typeChangeHandler = (evt) => {
     evt.preventDefault();
-    this.updateElement({type: evt.target.value.toLowerCase(), offers: []});
+    this.updateElement({ type: evt.target.value.toLowerCase(), offers: [] });
   };
 
   #destinationChangeHandler = (evt) => {
@@ -96,7 +63,7 @@ export default class FormView extends AbstractStatefulView {
     const chosenDestination = this.#destinations.find((destination) => destination.name === evt.target.value);
     const chosenDestinationId = chosenDestination ? chosenDestination.id : '';
 
-    this.updateElement({destination: chosenDestinationId});
+    this.updateElement({ destination: chosenDestinationId });
   };
 
   #priceChangeHandler = (evt) => {
@@ -120,27 +87,60 @@ export default class FormView extends AbstractStatefulView {
       chosenOffers.push(offerId);
     }
 
-    this._setState({offers: chosenOffers});
+    this._setState({ offers: chosenOffers });
   };
 
   #dateFromChangeHandler = ([userDate]) => {
-    this._setState({dateFrom: userDate});
-    this.#datepickerTo.set({minDate: this._state.dateFrom});
+    this._setState({ dateFrom: userDate });
+    this.#datepickerTo.set({ minDate: this._state.dateFrom });
     this.#validateForm();
   };
 
   #dateToChangeHandler = ([userDate]) => {
-    this._setState({dateTo: userDate});
-    this.#datepickerFrom.set({maxDate: this._state.dateTo});
+    this._setState({ dateTo: userDate });
+    this.#datepickerFrom.set({ maxDate: this._state.dateTo });
     this.#validateForm();
   };
+
+  updateElement(update) {
+    super.updateElement(update);
+    this.setDatePicker();
+  }
+
+  removeElement() {
+    super.removeElement();
+
+    if (this.#datepickerFrom) {
+      this.#datepickerFrom.destroy();
+      this.#datepickerFrom = null;
+    }
+
+    if (this.#datepickerTo) {
+      this.#datepickerTo.destroy();
+      this.#datepickerTo = null;
+    }
+  }
+
+  _restoreHandlers() {
+    this.element.querySelector('form').addEventListener('submit', this.#formSubmitHandler);
+    this.element.querySelector('.event__type-group').addEventListener('change', this.#typeChangeHandler);
+    this.element.querySelector('.event__input--destination').addEventListener('change', this.#destinationChangeHandler);
+    this.element.querySelector('.event__input--price').addEventListener('change', this.#priceChangeHandler);
+    this.element.querySelector('.event__details').addEventListener('click', this.#offersChangeHandler);
+    this.element.querySelector('.event__reset-btn').addEventListener('click', this.#formDeleteClickHandler);
+    this.element.querySelector('.event__rollup-btn')?.addEventListener('click', this.#formCloseClickHandler);
+  }
+
+  reset(point) {
+    this.updateElement(FormView.parsePointToState(point));
+  }
 
   setDatePicker() {
     const commonSettings = {
       dateFormat: 'd/m/y H:i',
       enableTime: true,
-      locale: {firstDayOfWeek: 1},
-      'time_24hr': true,
+      locale: { firstDayOfWeek: 1 },
+      'time_24hr': true
     };
 
     this.#datepickerFrom = flatpickr(
@@ -149,7 +149,7 @@ export default class FormView extends AbstractStatefulView {
         ...commonSettings,
         defaultDate: this._state.dateFrom,
         onClose: this.#dateFromChangeHandler,
-        maxDate: this._state.dateTo,
+        maxDate: this._state.dateTo
       },
     );
 
@@ -159,7 +159,7 @@ export default class FormView extends AbstractStatefulView {
         ...commonSettings,
         defaultDate: this._state.dateTo,
         onClose: this.#dateToChangeHandler,
-        minDate: this._state.dateFrom,
+        minDate: this._state.dateFrom
       },
     );
   }
@@ -169,7 +169,7 @@ export default class FormView extends AbstractStatefulView {
       ...point,
       isDisabled: false,
       isSaving: false,
-      isDeleting: false,
+      isDeleting: false
     };
   }
 
