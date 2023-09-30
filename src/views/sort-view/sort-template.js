@@ -3,7 +3,7 @@ import { SORT_OPTIONS } from '../../const.js';
 export function createTemplate(currentSortType) {
   const buttonsTemplate = SORT_OPTIONS.map((option) => {
     const { name, sortCb } = option;
-    return /*html*/`
+    return `
       <div class="trip-sort__item  trip-sort__item--${name}">
         <input class="trip-sort__input  visually-hidden" type="radio" name="trip-sort"
           id="sort-${name}"
@@ -19,7 +19,7 @@ export function createTemplate(currentSortType) {
     `;
   }).join('');
 
-  return /*html*/`
+  return `
     <form class="trip-events__trip-sort  trip-sort" action="#" method="get">
       ${buttonsTemplate}
     </form>

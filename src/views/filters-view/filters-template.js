@@ -4,7 +4,7 @@ export function createTemplate(filters, currentFilter) {
   const filtrationTemplate = FILTER_OPTIONS.map((option) => {
     const filterName = option.name;
 
-    return /*html*/`
+    return `
       <div class="trip-filters__filter">
         <input class="trip-filters__filter-input  visually-hidden" type="radio" name="trip-filter"
           id="filter-${filterName}"
@@ -18,7 +18,7 @@ export function createTemplate(filters, currentFilter) {
     `;
   }).join('');
 
-  return /*html*/`
+  return `
     <form class="trip-filters" action="#" method="get">
       ${filtrationTemplate}
       <button class="visually-hidden" type="submit">Accept filter</button>

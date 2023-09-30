@@ -1,4 +1,4 @@
-export function createTemplate(cities, dates, wholePrice) {
+export function createTemplate(cities, dates, totalPrice) {
   return `
     <section class="trip-main__trip-info  trip-info">
       <div class="trip-info__main">
@@ -8,7 +8,7 @@ export function createTemplate(cities, dates, wholePrice) {
       </div>
 
       <p class="trip-info__cost">
-        Total: &euro;&nbsp;<span class="trip-info__cost-value">${wholePrice}</span>
+        Total: &euro;&nbsp;<span class="trip-info__cost-value">${totalPrice}</span>
       </p>
     </section>
   `;

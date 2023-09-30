@@ -30,6 +30,78 @@ export default class FormView extends AbstractStatefulView {
     return createTemplate(this._state, this.#offers, this.#destinations);
   }
 
+  #validateForm() {
+    this.element.querySelector('.event__save-btn').disabled = !isFormValid(this._state);
+  }
+
+  #formSubmitHandler = (evt) => {
+    evt.preventDefault();
+    this.#handleFormSubmit(FormView.parseStateToPoint(this._state));
+  };
+
+  #formDeleteClickHandler = (evt) => {
+    evt.preventDefault();
+    if (this._state.id) {
+      this.#handleDeleteClick(FormView.parseStateToPoint(this._state));
+      return;
+    }
+    this.#handleDeleteClick();
+  };
+
+  #formCloseClickHandler = (evt) => {
+    evt.preventDefault();
+    this.#handleCloseClick();
+  };
+
+  #typeChangeHandler = (evt) => {
+    evt.preventDefault();
+    this.updateElement({ type: evt.target.value.toLowerCase(), offers: [] });
+  };
+
+  #destinationChangeHandler = (evt) => {
+    evt.preventDefault();
+    const chosenDestination = this.#destinations.find((destination) => destination.name === evt.target.value);
+    const chosenDestinationId = chosenDestination ? chosenDestination.id : '';
+
+    this.updateElement({ destination: chosenDestinationId });
+  };
+
+  #priceChangeHandler = (evt) => {
+    evt.preventDefault();
+    this._setState({ basePrice: evt.target.valueAsNumber });
+    this.#validateForm();
+  };
+
+  #offersChangeHandler = (evt) => {
+    if (!evt.target.classList.contains('event__offer-checkbox')) {
+      return;
+    }
+
+    const chosenOffers = this._state.offers;
+    const offerId = evt.target.value;
+    const offerIndex = chosenOffers.indexOf(offerId);
+
+    if (offerIndex >= 0) {
+      chosenOffers.splice(offerIndex, 1);
+    } else {
+      chosenOffers.push(offerId);
+    }
+
+    this._setState({ offers: chosenOffers });
+  };
+
+  #dateFromChangeHandler = ([userDate]) => {
+    this._setState({ dateFrom: userDate });
+    this.#datepickerTo.set({ minDate: this._state.dateFrom });
+    this.#validateForm();
+  };
+
+  #dateToChangeHandler = ([userDate]) => {
+    this._setState({ dateTo: userDate });
+    this.#datepickerFrom.set({ maxDate: this._state.dateTo });
+    this.#validateForm();
+  };
+
   updateElement(update) {
     super.updateElement(update);
     this.setDatePicker();
@@ -60,87 +132,15 @@ export default class FormView extends AbstractStatefulView {
   }
 
   reset(point) {
-    this.updateElement(FormView.parsePointToState(point),);
+    this.updateElement(FormView.parsePointToState(point));
   }
-
-  #validateForm() {
-    this.element.querySelector('.event__save-btn').disabled = !isFormValid(this._state);
-  }
-
-  #formSubmitHandler = (evt) => {
-    evt.preventDefault();
-    this.#handleFormSubmit(FormView.parseStateToPoint(this._state));
-  };
-
-  #formDeleteClickHandler = (evt) => {
-    evt.preventDefault();
-    if (this._state.id) {
-      this.#handleDeleteClick(FormView.parseStateToPoint(this._state));
-      return;
-    }
-    this.#handleDeleteClick();
-  };
-
-  #formCloseClickHandler = (evt) => {
-    evt.preventDefault();
-    this.#handleCloseClick();
-  };
-
-  #typeChangeHandler = (evt) => {
-    evt.preventDefault();
-    this.updateElement({type: evt.target.value.toLowerCase(), offers: []});
-  };
-
-  #destinationChangeHandler = (evt) => {
-    evt.preventDefault();
-    const chosenDestination = this.#destinations.find((destination) => destination.name === evt.target.value);
-    const chosenDestinationId = chosenDestination ? chosenDestination.id : '';
-
-    this.updateElement({destination: chosenDestinationId});
-  };
-
-  #priceChangeHandler = (evt) => {
-    evt.preventDefault();
-    this._setState({ basePrice: evt.target.valueAsNumber });
-    this.#validateForm();
-  };
-
-  #offersChangeHandler = (evt) => {
-    if (!evt.target.classList.contains('event__offer-checkbox')) {
-      return;
-    }
-
-    const chosenOffers = this._state.offers;
-    const offerId = evt.target.value;
-    const offerIndex = chosenOffers.indexOf(offerId);
-
-    if (offerIndex >= 0) {
-      chosenOffers.splice(offerIndex, 1);
-    } else {
-      chosenOffers.push(offerId);
-    }
-
-    this._setState({offers: chosenOffers});
-  };
-
-  #dateFromChangeHandler = ([userDate]) => {
-    this._setState({dateFrom: userDate});
-    this.#datepickerTo.set({minDate: this._state.dateFrom});
-    this.#validateForm();
-  };
-
-  #dateToChangeHandler = ([userDate]) => {
-    this._setState({dateTo: userDate});
-    this.#datepickerFrom.set({maxDate: this._state.dateTo});
-    this.#validateForm();
-  };
 
   setDatePicker() {
     const commonSettings = {
       dateFormat: 'd/m/y H:i',
       enableTime: true,
-      locale: {firstDayOfWeek: 1},
-      'time_24hr': true,
+      locale: { firstDayOfWeek: 1 },
+      'time_24hr': true
     };
 
     this.#datepickerFrom = flatpickr(
@@ -149,7 +149,7 @@ export default class FormView extends AbstractStatefulView {
         ...commonSettings,
         defaultDate: this._state.dateFrom,
         onClose: this.#dateFromChangeHandler,
-        maxDate: this._state.dateTo,
+        maxDate: this._state.dateTo
       },
     );
 
@@ -159,7 +159,7 @@ export default class FormView extends AbstractStatefulView {
         ...commonSettings,
         defaultDate: this._state.dateTo,
         onClose: this.#dateToChangeHandler,
-        minDate: this._state.dateFrom,
+        minDate: this._state.dateFrom
       },
     );
   }
@@ -169,7 +169,7 @@ export default class FormView extends AbstractStatefulView {
       ...point,
       isDisabled: false,
       isSaving: false,
-      isDeleting: false,
+      isDeleting: false
     };
   }
 

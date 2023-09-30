@@ -60,6 +60,107 @@ export default class BoardPresenter {
     return filteredPoints.sort(this.#currentSortOption.sortCb);
   }
 
+  #handleViewAction = async (actionType, updateType, update) => {
+    this.#uiBlocker.block();
+    switch (actionType) {
+      case UserAction.UPDATE_POINT:
+        this.#pointsPresenters.get(update.id).setSaving();
+        this.#pointEditingId = null;
+        try {
+          await this.#pointsModel.updatePoint(updateType, update);
+        } catch (err) {
+          this.#pointsPresenters.get(update.id).setAborting();
+        }
+        break;
+      case UserAction.ADD_POINT:
+        this.#newPointPresenter.setSaving();
+        this.#pointEditingId = null;
+        try {
+          await this.#pointsModel.addPoint(updateType, update);
+        } catch (err) {
+          this.#newPointPresenter.setAborting();
+        }
+        break;
+      case UserAction.DELETE_POINT:
+        this.#pointsPresenters.get(update.id).setDeleting();
+        this.#pointEditingId = null;
+        try {
+          await this.#pointsModel.deletePoint(updateType, update);
+        } catch (err) {
+          this.#pointsPresenters.get(update.id).setAborting();
+        }
+        break;
+      default:
+        throw new Error('There are no such actionType');
+    }
+    this.#uiBlocker.unblock();
+  };
+
+  #handleModelEvent = (updateType, point) => {
+    switch (updateType) {
+      case UpdateType.PATCH:
+        this.#pointsPresenters.get(point.id).init(point);
+        break;
+      case UpdateType.MINOR:
+        this.#clearBoard();
+        this.#renderBoard();
+        break;
+      case UpdateType.MAJOR:
+        this.#clearBoard({ resetSortType: true });
+        this.#renderBoard();
+        break;
+      case UpdateType.INIT:
+        this.#isLoading = false;
+        remove(this.#loadingComponent);
+        this.#renderBoard();
+        break;
+      default:
+        throw new Error('There are no such updateType');
+    }
+  };
+
+  #handleModeChange = (id, mode) => {
+    if (mode === Mode.DEFAULT) {
+      this.#pointEditingId = null;
+      return;
+    }
+    this.#newPointPresenter.destroy();
+
+    if (this.#pointEditingId !== null) {
+      this.#pointsPresenters.get(this.#pointEditingId).closeForm();
+    }
+
+    this.#pointEditingId = id;
+  };
+
+  #handleSortOptionChange = (sortOptionName = DEFAULT_SORT_OPTION.name) => {
+    const sortOption = SORT_OPTIONS.find((option) => option.name === sortOptionName);
+
+    if (this.#currentSortOption === sortOption) {
+      return;
+    }
+
+    this.#currentSortOption = sortOption;
+    this.#clearBoard();
+    this.#renderBoard();
+  };
+
+  #handleNewPointDestroy = () => {
+    this.#disableNewPointButton(false);
+    this.#isCreating = false;
+
+    if (this.points.length === 0) {
+      this.#clearBoard();
+      this.#renderBoard();
+    }
+  };
+
+  #handleNewEventButtonClick = () => {
+    this.#createPoint();
+    this.#disableNewPointButton(true);
+    this.#pointEditingId = null;
+  };
+
   init() {
     this.#newPointButtonComponent = new NewPointButtonView({
       onClick: this.#handleNewEventButtonClick
@@ -154,105 +255,4 @@ export default class BoardPresenter {
     this.#filterModel.setOption(UpdateType.MAJOR, DEFAULT_FILTER_OPTION.name);
     this.#newPointPresenter.init();
   }
-
-  #handleViewAction = async (actionType, updateType, update) => {
-    this.#uiBlocker.block();
-    switch (actionType) {
-      case UserAction.UPDATE_POINT:
-        this.#pointsPresenters.get(update.id).setSaving();
-        this.#pointEditingId = null;
-        try {
-          await this.#pointsModel.updatePoint(updateType, update);
-        } catch(err) {
-          this.#pointsPresenters.get(update.id).setAborting();
-        }
-        break;
-      case UserAction.ADD_POINT:
-        this.#newPointPresenter.setSaving();
-        this.#pointEditingId = null;
-        try {
-          await this.#pointsModel.addPoint(updateType, update);
-        } catch(err) {
-          this.#newPointPresenter.setAborting();
-        }
-        break;
-      case UserAction.DELETE_POINT:
-        this.#pointsPresenters.get(update.id).setDeleting();
-        this.#pointEditingId = null;
-        try {
-          await this.#pointsModel.deletePoint(updateType, update);
-        } catch(err) {
-          this.#pointsPresenters.get(update.id).setAborting();
-        }
-        break;
-      default:
-        throw new Error('There are no such actionType');
-    }
-    this.#uiBlocker.unblock();
-  };
-
-  #handleModelEvent = (updateType, data) => {
-    switch (updateType) {
-      case UpdateType.PATCH:
-        this.#pointsPresenters.get(data.id).init(data);
-        break;
-      case UpdateType.MINOR:
-        this.#clearBoard();
-        this.#renderBoard();
-        break;
-      case UpdateType.MAJOR:
-        this.#clearBoard({resetSortType: true});
-        this.#renderBoard();
-        break;
-      case UpdateType.INIT:
-        this.#isLoading = false;
-        remove(this.#loadingComponent);
-        this.#renderBoard();
-        break;
-      default:
-        throw new Error('There are no such updateType');
-    }
-  };
-
-  #handleModeChange = (id, mode) => {
-    if (mode === Mode.DEFAULT) {
-      this.#pointEditingId = null;
-      return;
-    }
-    this.#newPointPresenter.destroy();
-
-    if (this.#pointEditingId !== null) {
-      this.#pointsPresenters.get(this.#pointEditingId).closeForm();
-    }
-
-    this.#pointEditingId = id;
-  };
-
-  #handleSortOptionChange = (sortOptionName = DEFAULT_SORT_OPTION.name) => {
-    const sortOption = SORT_OPTIONS.find((option) => option.name === sortOptionName);
-
-    if (this.#currentSortOption === sortOption) {
-      return;
-    }
-
-    this.#currentSortOption = sortOption;
-    this.#clearBoard();
-    this.#renderBoard();
-  };
-
-  #handleNewPointDestroy = () => {
-    this.#disableNewPointButton(false);
-    this.#isCreating = false;
-
-    if (this.points.length === 0) {
-      this.#clearBoard();
-      this.#renderBoard();
-    }
-  };
-
-  #handleNewEventButtonClick = () => {
-    this.#createPoint();
-    this.#disableNewPointButton(true);
-    this.#pointEditingId = null;
-  };
 }
