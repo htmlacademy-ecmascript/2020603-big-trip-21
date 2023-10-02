@@ -20,6 +20,28 @@ export default class SummaryPresenter {
     this.#pointsModel.addObserver(this.#handleModelEvent);
   }
 
+  init() {
+    if (this.#pointsModel.points.length === 0 || this.#pointsModel.isFailed || this.#offersModel.isFailed || this.#destinationsModel.isFailed) {
+      remove(this.#summaryComponent);
+      return;
+    }
+
+    const prevSummaryComponent = this.#summaryComponent;
+    this.#summaryComponent = new SummaryView({
+      cities: this.#getCities(),
+      dates: this.#getDates(),
+      totalPrice: this.#getTotalPrice()
+    });
+
+    if (prevSummaryComponent === null) {
+      render(this.#summaryComponent, this.#summaryContainer, RenderPosition.BEFOREBEGIN);
+      return;
+    }
+
+    replace(this.#summaryComponent, prevSummaryComponent);
+    remove(prevSummaryComponent);
+  }
+
   #handleModelEvent = () => {
     this.init();
   };
@@ -52,27 +74,5 @@ export default class SummaryPresenter {
     const allOffersSum = allOffers.reduce((sum, offer) => sum + offer.price, 0);
 
     return allPointsPrice + allOffersSum;
-  }
-
-  init() {
-    if (this.#pointsModel.points.length === 0 || this.#pointsModel.isFailed || this.#offersModel.isFailed || this.#destinationsModel.isFailed) {
-      remove(this.#summaryComponent);
-      return;
-    }
-
-    const prevSummaryComponent = this.#summaryComponent;
-    this.#summaryComponent = new SummaryView({
-      cities: this.#getCities(),
-      dates: this.#getDates(),
-      totalPrice: this.#getTotalPrice()
-    });
-
-    if (prevSummaryComponent === null) {
-      render(this.#summaryComponent, this.#summaryContainer, RenderPosition.BEFOREBEGIN);
-      return;
-    }
-
-    replace(this.#summaryComponent, prevSummaryComponent);
-    remove(prevSummaryComponent);
   }
 }

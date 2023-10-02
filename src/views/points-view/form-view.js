@@ -30,6 +30,58 @@ export default class FormView extends AbstractStatefulView {
     return createTemplate(this._state, this.#offers, this.#destinations);
   }
 
+  removeElement() {
+    super.removeElement();
+
+    if (this.#datepickerFrom) {
+      this.#datepickerFrom.destroy();
+      this.#datepickerFrom = null;
+    }
+
+    if (this.#datepickerTo) {
+      this.#datepickerTo.destroy();
+      this.#datepickerTo = null;
+    }
+  }
+
+  updateElement(update) {
+    super.updateElement(update);
+    this.setDatePicker();
+  }
+
+  reset(point) {
+    this.updateElement(FormView.parsePointToState(point));
+  }
+
+  setDatePicker() {
+    const commonSettings = {
+      dateFormat: 'd/m/y H:i',
+      enableTime: true,
+      locale: { firstDayOfWeek: 1 },
+      'time_24hr': true
+    };
+
+    this.#datepickerFrom = flatpickr(
+      this.element.querySelector('#event-start-time-1'),
+      {
+        ...commonSettings,
+        defaultDate: this._state.dateFrom,
+        onClose: this.#dateFromChangeHandler,
+        maxDate: this._state.dateTo
+      },
+    );
+
+    this.#datepickerTo = flatpickr(
+      this.element.querySelector('#event-end-time-1'),
+      {
+        ...commonSettings,
+        defaultDate: this._state.dateTo,
+        onClose: this.#dateToChangeHandler,
+        minDate: this._state.dateFrom
+      },
+    );
+  }
+
   #validateForm() {
     this.element.querySelector('.event__save-btn').disabled = !isFormValid(this._state);
   }
@@ -102,25 +154,6 @@ export default class FormView extends AbstractStatefulView {
     this.#validateForm();
   };
 
-  updateElement(update) {
-    super.updateElement(update);
-    this.setDatePicker();
-  }
-
-  removeElement() {
-    super.removeElement();
-
-    if (this.#datepickerFrom) {
-      this.#datepickerFrom.destroy();
-      this.#datepickerFrom = null;
-    }
-
-    if (this.#datepickerTo) {
-      this.#datepickerTo.destroy();
-      this.#datepickerTo = null;
-    }
-  }
-
   _restoreHandlers() {
     this.element.querySelector('form').addEventListener('submit', this.#formSubmitHandler);
     this.element.querySelector('.event__type-group').addEventListener('change', this.#typeChangeHandler);
@@ -129,39 +162,6 @@ export default class FormView extends AbstractStatefulView {
     this.element.querySelector('.event__details').addEventListener('click', this.#offersChangeHandler);
     this.element.querySelector('.event__reset-btn').addEventListener('click', this.#formDeleteClickHandler);
     this.element.querySelector('.event__rollup-btn')?.addEventListener('click', this.#formCloseClickHandler);
-  }
-
-  reset(point) {
-    this.updateElement(FormView.parsePointToState(point));
-  }
-
-  setDatePicker() {
-    const commonSettings = {
-      dateFormat: 'd/m/y H:i',
-      enableTime: true,
-      locale: { firstDayOfWeek: 1 },
-      'time_24hr': true
-    };
-
-    this.#datepickerFrom = flatpickr(
-      this.element.querySelector('#event-start-time-1'),
-      {
-        ...commonSettings,
-        defaultDate: this._state.dateFrom,
-        onClose: this.#dateFromChangeHandler,
-        maxDate: this._state.dateTo
-      },
-    );
-
-    this.#datepickerTo = flatpickr(
-      this.element.querySelector('#event-end-time-1'),
-      {
-        ...commonSettings,
-        defaultDate: this._state.dateTo,
-        onClose: this.#dateToChangeHandler,
-        minDate: this._state.dateFrom
-      },
-    );
   }
 
   static parsePointToState(point) {

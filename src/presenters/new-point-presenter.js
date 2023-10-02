@@ -21,25 +21,6 @@ export default class NewPointPresenter {
     this.#handleDestroy = onDestroy;
   }
 
-  #handleFormSubmit = (point) => {
-    this.#handleDataChange(
-      UserAction.ADD_POINT,
-      UpdateType.MINOR,
-      point,
-    );
-  };
-
-  #handleCloseClick = () => {
-    this.destroy();
-  };
-
-  #escKeyDownHandler = (evt) => {
-    if (isEscapeKeydown(evt.key)) {
-      evt.preventDefault();
-      this.destroy();
-    }
-  };
-
   init() {
     if (this.#formComponent !== null) {
       return;
@@ -88,4 +69,23 @@ export default class NewPointPresenter {
 
     this.#formComponent.shake(resetFormState);
   }
+
+  #handleFormSubmit = (point) => {
+    this.#handleDataChange(
+      UserAction.ADD_POINT,
+      UpdateType.MINOR,
+      point,
+    );
+  };
+
+  #handleCloseClick = () => {
+    this.destroy();
+  };
+
+  #escKeyDownHandler = (evt) => {
+    if (isEscapeKeydown(evt.key)) {
+      evt.preventDefault();
+      this.destroy();
+    }
+  };
 }

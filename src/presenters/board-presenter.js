@@ -60,6 +60,14 @@ export default class BoardPresenter {
     return filteredPoints.sort(this.#currentSortOption.sortCb);
   }
 
+  init() {
+    this.#newPointButtonComponent = new NewPointButtonView({
+      onClick: this.#handleNewEventButtonClick
+    });
+    render(this.#newPointButtonComponent, this.#headerContainer);
+    this.#renderBoard();
+  }
+
   #handleViewAction = async (actionType, updateType, update) => {
     this.#uiBlocker.block();
     switch (actionType) {
@@ -96,10 +104,10 @@ export default class BoardPresenter {
     this.#uiBlocker.unblock();
   };
 
-  #handleModelEvent = (updateType, point) => {
+  #handleModelEvent = (updateType, data) => {
     switch (updateType) {
       case UpdateType.PATCH:
-        this.#pointsPresenters.get(point.id).init(point);
+        this.#pointsPresenters.get(data.id).init(data);
         break;
       case UpdateType.MINOR:
         this.#clearBoard();
@@ -150,8 +158,7 @@ export default class BoardPresenter {
     this.#isCreating = false;
 
     if (this.points.length === 0) {
-      this.#clearBoard();
-      this.#renderBoard();
+      this.#handleModelEvent(UpdateType.MINOR, this.points);
     }
   };
 
@@ -160,14 +167,6 @@ export default class BoardPresenter {
     this.#disableNewPointButton(true);
     this.#pointEditingId = null;
   };
-
-  init() {
-    this.#newPointButtonComponent = new NewPointButtonView({
-      onClick: this.#handleNewEventButtonClick
-    });
-    render(this.#newPointButtonComponent, this.#headerContainer);
-    this.#renderBoard();
-  }
 
   #renderBoard() {
     if (this.#isLoading) {

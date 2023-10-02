@@ -27,14 +27,6 @@ export default class FilterPresenter {
     }, {});
   }
 
-  #handleModelEvent = () => {
-    this.init();
-  };
-
-  #handleFilterOptionChange = (optionName) => {
-    this.#filterModel.setOption(UpdateType.MAJOR, optionName);
-  };
-
   init() {
     const prevFilterComponent = this.#filterComponent;
     this.#filterComponent = new FilterView({
@@ -51,4 +43,12 @@ export default class FilterPresenter {
     replace(this.#filterComponent, prevFilterComponent);
     remove(prevFilterComponent);
   }
+
+  #handleModelEvent = () => {
+    this.init();
+  };
+
+  #handleFilterOptionChange = (optionName) => {
+    this.#filterModel.setOption(UpdateType.MAJOR, optionName);
+  };
 }
