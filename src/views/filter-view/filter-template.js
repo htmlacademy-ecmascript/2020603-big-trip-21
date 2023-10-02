@@ -1,7 +1,7 @@
 import { FILTER_OPTIONS } from '../../const.js';
 
 export function createTemplate(filters, currentFilter) {
-  const filtrationTemplate = FILTER_OPTIONS.map((option) => {
+  const filterTemplate = FILTER_OPTIONS.map((option) => {
     const filterName = option.name;
 
     return `
@@ -20,7 +20,7 @@ export function createTemplate(filters, currentFilter) {
 
   return `
     <form class="trip-filters" action="#" method="get">
-      ${filtrationTemplate}
+      ${filterTemplate}
       <button class="visually-hidden" type="submit">Accept filter</button>
     </form>
   `;

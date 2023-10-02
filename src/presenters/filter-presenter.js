@@ -1,4 +1,4 @@
-import FilterView from '../views/filters-view/filters-view.js';
+import FilterView from '../views/filter-view/filter-view.js';
 import { render, replace, remove } from '../framework/render.js';
 import { FILTER_OPTIONS, UpdateType } from '../const.js';
 
