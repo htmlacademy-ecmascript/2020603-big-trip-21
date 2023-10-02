@@ -1,7 +1,7 @@
 import { createTemplate } from './filters-template.js';
 import AbstractView from '../../framework/view/abstract-view.js';
 
-export default class FilterView extends AbstractView {
+export default class FiltersView extends AbstractView {
   #filters = null;
   #currentOptionName = null;
   #handleOptionChange = null;
