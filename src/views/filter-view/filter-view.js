@@ -1,4 +1,4 @@
-import { createTemplate } from './filters-template.js';
+import { createTemplate } from './filter-template.js';
 import AbstractView from '../../framework/view/abstract-view.js';
 
 export default class FilterView extends AbstractView {
